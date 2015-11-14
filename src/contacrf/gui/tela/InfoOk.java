@@ -8,7 +8,7 @@ import javafx.scene.control.Alert.AlertType;
 public class InfoOk implements EventHandler<ActionEvent>{	// TELA PARA CONFIRMAÇÃO
 	public void handle(ActionEvent evento) {
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle(" Enterprise ™");
+		alert.setTitle("Zathura Enterprise ™");
 		alert.setHeaderText("Realizado com sucesso!");
 		alert.setContentText("");
 		alert.show();

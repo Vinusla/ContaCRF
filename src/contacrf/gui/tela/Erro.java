@@ -14,7 +14,7 @@ public class Erro implements EventHandler<ActionEvent>{
 	}
 	public void handle(ActionEvent evento) {
 		Alert alert = new Alert(AlertType.ERROR);
-    	alert.setTitle(" Enterprise ™");
+    	alert.setTitle("Zathura Enterprise ™");
     	alert.setHeaderText("ERRO!!");
     	if(erro)
     		alert.setContentText("Conta já existe no sistema!");

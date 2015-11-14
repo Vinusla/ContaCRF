@@ -27,11 +27,17 @@ public class Cadastro implements EventHandler<ActionEvent>{
 		cena.setPadding(new Insets(20,35,20,35));
 		bot.setCbsexo("MASCULINO");
 		HBox hb1 = new HBox(10);
-		HBox hb2 = new HBox(10);
 		hb1.getChildren().addAll(new Label("Nome"),bot.getTf1(),new Label("Sexo"),bot.getCbsexo());
-		hb2.getChildren().addAll(new Label("Endereço"));
+		HBox hb2 = new HBox(10);
+		hb2.getChildren().addAll(new Label("Data nascimento"),bot.getTf2(),new Label("CPF"),bot.getTf3());
+		HBox hb3 = new HBox(10);
+		hb3.getChildren().addAll(new Label("Endereço"),bot.getTf4(),new Label("Num"),bot.getTf5(),new Label("Estado"),bot.getCbest());
+		HBox hb4 = new HBox(10);
+		hb4.getChildren().addAll(new Label("Complemento"),bot.getTf6(),new Label("Bairro"),bot.getTf7(),new Label("CEP"),bot.getTf8());
 		cena.add(hb1, 0, 0);
 		cena.add(hb2, 0, 1);
+		cena.add(hb3, 0, 2);
+		cena.add(hb4, 0, 3);
 		dialog.getDialogPane().setContent(cena);
 
 		//CONFIG BOTOES DO CANTO

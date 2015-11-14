@@ -1,6 +1,8 @@
 package contacrf.gui.tela;
 
 import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
 
 import contacrf.gui.Botoes;
 import javafx.event.ActionEvent;
@@ -13,12 +15,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 public class Relatorio implements EventHandler<ActionEvent>{
-	private final String[] arrayData = { "First", "Second", "Third", "Fourth" };
+	private final Set arrayData = new TreeSet<>();
 	public void handle(ActionEvent evento) {
 		Arrays.asList(arrayData);
 		Botoes bot = new Botoes();
 		Dialog<ButtonType> dialog = new Dialog<>();
-		dialog.setTitle(" Enterprise ™");
+		dialog.setTitle("Zathura Enterprise ™");
 		dialog.setHeaderText("Selecione o cliente");
 		HBox hb = new HBox(10);
 		hb.getChildren().add(bot.getListaCli());
@@ -42,4 +44,5 @@ public class Relatorio implements EventHandler<ActionEvent>{
 			}
 		});
 	}
+
 }
