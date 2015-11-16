@@ -1,52 +1,72 @@
 package contacrf.model;
 
-import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
-public class Conta implements Transacao{
-  private String numero;
-  private Correntista titular ;
-  private List<Transacao> transacoes;
-public String getNumero() {
-	return numero;
-}
-public void setNumero(String numero) {
-	this.numero = numero;
-}
-public Correntista getTitular() {
-	return titular;
-}
-public void setTitular(Correntista titular) {
-	this.titular = titular;
-}
-public List<Transacao> getTransacoes() {
-	return transacoes;
-}
-public void setTransacoes(List<Transacao> transacoes) {
-	this.transacoes = transacoes;
-}
-@Override
-public String getID() {
-	// TODO Auto-generated method stub
-	return null;
-}
-@Override
-public String getDescricao() {
-	// TODO Auto-generated method stub
-	return null;
-}
-@Override
-public Date getData() {
-	// TODO Auto-generated method stub
-	return null;
-}
-@Override
-public float getValor() {
-	// TODO Auto-generated method stub
-	return 0;
-}
 
-  
-  
+
+@Entity
+public class Conta {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private int id;	
+	
+	@Column(name = "num_Conta")
+	private String numero;
+	
+	@OneToOne (targetEntity = PessoaFisica.class)
+	@JoinColumn(name = "id_pesF")
+	private Correntista titular;
+
+	@Column(name = "saldo")
+	private float saldo;
+
+	//@OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
+	//private List<Transacao> transacoes;
+	
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public Correntista getTitular() {
+		return titular;
+	}
+
+	public void setTitular(Correntista titular) {
+		this.titular = titular;
+	}
+
+	//public List<Transacao> getTransacoes() {
+	//	return transacoes;
+	//}
+
+	//public void setTransacoes(List<Transacao> transacoes) {
+	//	this.transacoes = transacoes;
+	//}
+
+	public float getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(float saldo) {
+		this.saldo = saldo;
+	}
+	
+
 }

@@ -1,6 +1,16 @@
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+
+
+
 import contacrf.gui.*;
 import contacrf.gui.tela.*;
+import contacrf.model.Conta;
+import contacrf.model.Endereco;
+import contacrf.model.PessoaFisica;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -40,5 +50,41 @@ public class Main extends Application{
 		bot.getCad().setOnAction(new Cadastro()); // BUTTON CADASTRAR
 		bot.getCli().setOnAction(new Cliente()); // BUTTON CLIENTE
 		bot.getRelatorio().setOnAction(new Relatorio());
+		
+		
+		
+		
+		/** EntityManagerFactory emf = Persistence.createEntityManagerFactory("contacrf");
+	     EntityManager em = emf.createEntityManager();
+	     
+	     em.getTransaction().begin();
+	     
+		
+	    Endereco end = new Endereco("ali", "jp", 64);
+				
+		PessoaFisica pe = new PessoaFisica();
+		pe.setNome("Vinicius");
+		pe.setCPF("58585858855");
+		pe.setEndereco(end);
+		
+		
+		Conta c = new Conta();
+		c.setNumero("111");
+		c.setSaldo(10.5f);
+		c.setTitular(pe);
+		
+		em.persist(end);
+		em.persist(pe);
+		em.persist(c);
+		
+		em.getTransaction().commit();
+		
+		em.close();
+		emf.close();
+		**/
+		
+		
+		
+		
 	}
 }
