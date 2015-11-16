@@ -36,7 +36,7 @@ public class Main extends Application{
 		VBN.getChildren().addAll(new Label("Desenvolvido por"),new Label("Mateus Cordeiro")
 			,new Label("Pedro Fontes"),new Label("Gusttavo Heinrich"),new Label("Vinicius Lopes"));
 		VBM.getChildren().addAll(img.getImgLogo(),HB1,VBN); // ADD BOTOES
-		Scene scene = new Scene(VBM, 300, 390);
+		Scene scene = new Scene(VBM, 300, 490);
 		stage.setTitle("Zathura Enterprise ™");
 		stage.setScene(scene);
 		stage.show();

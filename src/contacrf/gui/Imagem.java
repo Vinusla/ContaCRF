@@ -26,6 +26,8 @@ public class Imagem {
 		return imgRel;
 	}
 	public Imagem() {
+		this.imgLogo.setFitHeight(200);
+		this.imgLogo.setFitWidth(200);
 		this.imgRel.setFitHeight(70);
 		this.imgRel.setFitWidth(65);
 		this.imgCad.setFitHeight(70);
