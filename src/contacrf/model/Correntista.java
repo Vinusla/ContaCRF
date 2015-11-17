@@ -6,5 +6,5 @@ public interface Correntista {
 
 	public String getNome();
 
-	public String getEndereco();
+	public Endereco getEndereco();
 }

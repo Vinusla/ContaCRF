@@ -2,16 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/hibernate-commons-annotations-5.0.0.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/hibernate-core-5.0.2.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/hibernate-jpa-2.1-api-1.0.0.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/mysql-connector-java-5.1.37-bin.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/hibernate-entitymanager-5.0.2.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/jboss-logging-3.3.0.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/antlr-2.7.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/geronimo-jta_1.1_spec-1.1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/jandex-1.2.2.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vinicius/Dropbox/Unipe/P4 - [2015.2]/Metodologia e linguagem de programaçao avançada/Projeto Final/ContaCRF/lib hibernate/javassist-3.18.1-GA.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.37-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

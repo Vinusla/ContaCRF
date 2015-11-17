@@ -1,16 +1,5 @@
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-
-
-
 import contacrf.gui.*;
 import contacrf.gui.tela.*;
-import contacrf.model.Conta;
-import contacrf.model.Endereco;
-import contacrf.model.PessoaFisica;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,8 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-public class Main extends Application{
-	public static void main(String[] args)throws Exception{
+
+public class Main extends Application {
+	public static void main(String[] args) throws Exception {
 		Application.launch(); // INICIA START
 	}
 
@@ -37,15 +27,16 @@ public class Main extends Application{
 		VBox VB2 = new VBox(5);
 		VBox VB3 = new VBox(5);
 		VBox VBN = new VBox(10);
-		VB1.getChildren().addAll(img.getImgCad(),bot.getCad());
-		VB2.getChildren().addAll(img.getImgRel(),bot.getRelatorio());
-		VB3.getChildren().addAll(img.getImgCli(),bot.getCli());
-		//VB1.getChildren().addAll(img.getImgCad(),bot.getCad());
-		HB1.getChildren().addAll(VB1,VB2,VB3);
+		VB1.getChildren().addAll(img.getImgCad(), bot.getCad());
+		VB2.getChildren().addAll(img.getImgRel(), bot.getRelatorio());
+		VB3.getChildren().addAll(img.getImgCli(), bot.getCli());
+		// VB1.getChildren().addAll(img.getImgCad(),bot.getCad());
+		HB1.getChildren().addAll(VB1, VB2, VB3);
 		VBN.setAlignment(Pos.CENTER);
-		VBN.getChildren().addAll(new Label("Desenvolvido por"),new Label("Mateus Cordeiro")
-			,new Label("Pedro Fontes"),new Label("Gusttavo Heinrich"),new Label("Vinicius Lopes"));
-		VBM.getChildren().addAll(img.getImgLogo(),HB1,VBN); // ADD BOTOES
+		VBN.getChildren().addAll(new Label("Desenvolvido por"),
+				new Label("Mateus Cordeiro"), new Label("Pedro Fontes"),
+				new Label("Gusttavo Heinrich"), new Label("Vinicius Lopes"));
+		VBM.getChildren().addAll(img.getImgLogo(), HB1, VBN); // ADD BOTOES
 		Scene scene = new Scene(VBM, 300, 490);
 		stage.setTitle("Zathura Enterprise ™");
 		stage.setScene(scene);
@@ -54,41 +45,6 @@ public class Main extends Application{
 		bot.getCad().setOnAction(new Cadastro()); // BUTTON CADASTRAR
 		bot.getCli().setOnAction(new Cliente()); // BUTTON CLIENTE
 		bot.getRelatorio().setOnAction(new Relatorio());
-		
-		
-		
-		
-		/** EntityManagerFactory emf = Persistence.createEntityManagerFactory("contacrf");
-	     EntityManager em = emf.createEntityManager();
-	     
-	     em.getTransaction().begin();
-	     
-		
-	    Endereco end = new Endereco("ali", "jp", 64);
-				
-		PessoaFisica pe = new PessoaFisica();
-		pe.setNome("Vinicius");
-		pe.setCPF("58585858855");
-		pe.setEndereco(end);
-		
-		
-		Conta c = new Conta();
-		c.setNumero("111");
-		c.setSaldo(10.5f);
-		c.setTitular(pe);
-		
-		em.persist(end);
-		em.persist(pe);
-		em.persist(c);
-		
-		em.getTransaction().commit();
-		
-		em.close();
-		emf.close();
-		**/
-		
-		
-		
-		
+
 	}
 }
