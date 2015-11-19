@@ -1,5 +1,10 @@
+import contacrf.DAO.EnderecoDAO;
+import contacrf.DAO.PessoaFisicaDAO;
+import contacrf.exception.ConexaoException;
 import contacrf.gui.*;
 import contacrf.gui.tela.*;
+import contacrf.model.Endereco;
+import contacrf.model.PessoaFisica;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,8 +14,20 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	public static void main(String[] args) throws Exception {
+	
+	public static void main(String[] args) throws ConexaoException {
+
+		PessoaFisicaDAO pedao = new PessoaFisicaDAO();
+		Endereco end = new Endereco("jose v", "fun2", 64);
+		
+		PessoaFisica pf = new PessoaFisica("vinicius", "111", end );		
+		
+		
+		pedao.save(pf);
+		
+		
 		Application.launch(); // INICIA START
+
 	}
 
 	public void start(Stage stage) throws Exception {

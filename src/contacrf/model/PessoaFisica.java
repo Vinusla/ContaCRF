@@ -2,7 +2,6 @@ package contacrf.model;
 
 public class PessoaFisica implements Correntista {
 
-	private int id;
 	private String cpf;
 	private String nome;
 	private Endereco endereco;
