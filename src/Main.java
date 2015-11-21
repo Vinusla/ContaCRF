@@ -6,62 +6,75 @@ import contacrf.gui.tela.*;
 import contacrf.model.Endereco;
 import contacrf.model.PessoaFisica;
 import javafx.application.Application;
-import javafx.geometry.Pos;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	
+
 	public static void main(String[] args) throws ConexaoException {
-
-		PessoaFisicaDAO pedao = new PessoaFisicaDAO();
-		Endereco end = new Endereco("jose v", "fun2", 64);
-		
-		PessoaFisica pf = new PessoaFisica("vinicius", "111", end );		
-		
-		
-		pedao.save(pf);
-		
-		
 		Application.launch(); // INICIA START
-
 	}
 
-	public void start(Stage stage) throws Exception {
-		Botoes bot = new Botoes();
+	public void start(Stage stage)throws ConexaoException {
 		Imagem img = new Imagem();
+		BorderPane pane = new BorderPane();
+	    Scene scene = new Scene(pane, 550, 550, Color.WHITE);
+	    MenuBar menuBar = new MenuBar();
+	    stage.setTitle("Zathura Enterprise ™");
+	    menuBar.prefWidthProperty().bind(stage.widthProperty());
+	    pane.setTop(menuBar);
+	    pane.setCenter(img.getImgLogo());						//ADD LOGO
 
-		// TELA PRINCIPAL
-		VBox VBM = new VBox(20);
-		HBox HB1 = new HBox(10);
-		VBM.setTranslateY(10); // ESPAÇO DA TELA AO LADO
-		VBM.setAlignment(Pos.TOP_CENTER);
-		HB1.setAlignment(Pos.CENTER);
-		VBox VB1 = new VBox(5);
-		VBox VB2 = new VBox(5);
-		VBox VB3 = new VBox(5);
-		VBox VBN = new VBox(10);
-		VB1.getChildren().addAll(img.getImgCad(), bot.getCad());
-		VB2.getChildren().addAll(img.getImgRel(), bot.getRelatorio());
-		VB3.getChildren().addAll(img.getImgCli(), bot.getCli());
-		// VB1.getChildren().addAll(img.getImgCad(),bot.getCad());
-		HB1.getChildren().addAll(VB1, VB2, VB3);
-		VBN.setAlignment(Pos.CENTER);
-		VBN.getChildren().addAll(new Label("Desenvolvido por"),
-				new Label("Mateus Cordeiro"), new Label("Pedro Fontes"),
-				new Label("Gusttavo Heinrich"), new Label("Vinicius Lopes"));
-		VBM.getChildren().addAll(img.getImgLogo(), HB1, VBN); // ADD BOTOES
-		Scene scene = new Scene(VBM, 300, 490);
-		stage.setTitle("Zathura Enterprise ™");
+		Menu menuInicio = new Menu("_Conta");					// MENU
+		MenuItem subAbrir = new MenuItem("Abrir conta");		// SUBMENU
+		MenuItem subEditar = new MenuItem("Editar conta"); 		// SUBMENU
+	    MenuItem subBuscar = new MenuItem("Buscar conta");
+	    MenuItem subFechar = new MenuItem("Fechar conta");
+		MenuItem subExit = new MenuItem("Exit");
+	    subExit.setOnAction(actionEvent -> Platform.exit());
+	    menuInicio.getItems().addAll(subAbrir,subEditar,subBuscar,subFechar,new SeparatorMenuItem(),
+	    		subExit);			//ADD SUBMENU
+
+	    Menu menuCliente = new Menu("_Cliente");				 // MENU
+	    MenuItem subRelatorio = new MenuItem("Gerar Relatorio");
+	    MenuItem subSaque = new MenuItem("Saque");
+	    MenuItem subSaldo = new MenuItem("Saldo");
+	    MenuItem subTransferencia = new MenuItem("Transferência");
+	    menuCliente.getItems().addAll(subSaque,subSaldo,subTransferencia,subRelatorio);
+
+	    Menu menuSobre = new Menu("_Ajuda");
+	    MenuItem subSobre = new MenuItem("Quem somos");
+	    menuSobre.getItems().addAll(subSobre);
+
+	    Menu menuEspecial = new Menu("_Especial");
+	    MenuItem subEspecial = new MenuItem ("Especial");
+	    menuEspecial.getItems().addAll(subEspecial);
+
+	    menuBar.getMenus().addAll(menuInicio,menuCliente,menuEspecial,menuSobre);
 		stage.setScene(scene);
 		stage.show();
+		/*// TESTE
+		PessoaFisicaDAO pedao = new PessoaFisicaDAO();
+		Endereco end = new Endereco("Rua Jose","Agua Fria",0,"58053-022","Proximo UNIPE","PB");
+		PessoaFisica pf = new PessoaFisica("Mateus C","123.456.789-10",end,"083 1234-1234","MASCULINO","11/22/33");
+		pedao.save(pf);
+*/
 		// BUTTONS MENU
-		bot.getCad().setOnAction(new Cadastro()); // BUTTON CADASTRAR
-		bot.getCli().setOnAction(new Cliente()); // BUTTON CLIENTE
-		bot.getRelatorio().setOnAction(new Relatorio());
+		subAbrir.setOnAction(new Cadastro());
+		subEditar.setOnAction(new Editar());
+		subBuscar.setOnAction(new Buscar());
+		subFechar.setOnAction(new Fechar());
 
+		subRelatorio.setOnAction(new Relatorio());
+		subEspecial.setOnAction(new Especial());
 	}
 }

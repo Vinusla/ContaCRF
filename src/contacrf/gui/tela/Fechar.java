@@ -8,10 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.HBox;
 
-public class Editar implements EventHandler<ActionEvent>{
+public class Fechar implements EventHandler<ActionEvent>{
 	public void handle(ActionEvent evento) {
-		TextField txf = new TextField();
 		Dialog<ButtonType> dialog = new Dialog<>();
+		TextField txf = new TextField();
 		dialog.setTitle("Zathura Enterprise ™");
 		dialog.setHeaderText("Selecione o cliente");
 		txf.setPrefWidth(200);

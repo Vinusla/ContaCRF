@@ -14,18 +14,14 @@ public class ConnectionFactory {
 	private ConnectionFactory() {}
 
 	public static ConnectionFactory getInstance() {
-
 		if (connectionFactory == null)
 			connectionFactory = new ConnectionFactory();
-
 		return connectionFactory;
-
 	}
 
 	public Connection getConnection() throws ConexaoException {
-
 		if (conexao == null) {
-			try {				
+			try {
 				conexao = DriverManager.getConnection("jdbc:mysql://localhost/contacrf", "root", "");
 				System.out.println("Abrindo Conexão");
 			} catch (SQLException e) {
@@ -36,7 +32,7 @@ public class ConnectionFactory {
 	}
 
 	public void fecharConexao() throws ConexaoException {
-		try {			
+		try {
 			conexao.close();
 			System.out.println("Fechando Conexão");
 		} catch (SQLException e) {
