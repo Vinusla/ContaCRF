@@ -35,6 +35,7 @@ public class ConnectionFactory {
 		try {
 			conexao.close();
 			System.out.println("Fechando Conexão");
+			conexao = null;
 		} catch (SQLException e) {
 			throw new ConexaoException(	"Não foi possível fechar a conexão com o banco");
 		}
