@@ -9,8 +9,6 @@ import contacrf.model.Endereco;
 import contacrf.model.PessoaFisica;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -39,66 +37,60 @@ public class Main extends Application {
 		Menu menuInicio = new Menu("_Conta"); // MENU
 		MenuItem subAbrir = new MenuItem("Abrir conta"); // SUBMENU
 		MenuItem subEditar = new MenuItem("Editar conta"); // SUBMENU
-		MenuItem subBuscar = new MenuItem("Buscar conta");
+		MenuItem subExibir = new MenuItem("Exibir contas");
 		MenuItem subFechar = new MenuItem("Fechar conta");
 		MenuItem subExit = new MenuItem("Exit");
 		subExit.setOnAction(actionEvent -> Platform.exit());
-		menuInicio.getItems().addAll(subAbrir, subEditar, subBuscar, subFechar,
+		menuInicio.getItems().addAll(subAbrir, subEditar, subExibir, subFechar,
 				new SeparatorMenuItem(), subExit); // ADD SUBMENU
 
-		Menu menuCliente = new Menu("_Cliente"); // MENU
+		Menu menuOperacoes = new Menu("_Operaçoes"); // MENU
 		MenuItem subRelatorio = new MenuItem("Gerar Relatorio");
 		MenuItem subSaque = new MenuItem("Saque");
+		MenuItem subDeposito = new MenuItem("Deposito");
 		MenuItem subSaldo = new MenuItem("Saldo");
 		MenuItem subTransferencia = new MenuItem("Transferência");
-		menuCliente.getItems().addAll(subSaque, subSaldo, subTransferencia,
+		menuOperacoes.getItems().addAll(subSaque,subDeposito, subSaldo, subTransferencia,
 				subRelatorio);
 
-		Menu menuSobre = new Menu("_Ajuda");
+		Menu menuAjuda = new Menu("_Ajuda");
 		MenuItem subSobre = new MenuItem("Quem somos");
-		menuSobre.getItems().addAll(subSobre);
+		menuAjuda.getItems().addAll(subSobre);
 
 		Menu menuEspecial = new Menu("_Especial");
 		MenuItem subEspecial = new MenuItem("Especial");
 		menuEspecial.getItems().addAll(subEspecial);
 
-		menuBar.getMenus().addAll(menuInicio, menuCliente, menuEspecial,
-				menuSobre);
+		menuBar.getMenus().addAll(menuInicio, menuOperacoes, menuEspecial,
+				menuAjuda);
 		stage.setScene(scene);
 		stage.show();
 
-		
-		
-		//Bloco de Teste 
-		
+		//Bloco de Teste
+/*
 		Endereco end = new Endereco("peido", "geisel", 74, "00000", "jjajajal", "PE");
-		PessoaFisica pf = new PessoaFisica("nos", "456", end, "8888", "femi", "10/10/10");		
+		PessoaFisica pf = new PessoaFisica("nos", "456", end, "8888", "femi", "10/10/10");
 		PessoaFisicaController pfc = new PessoaFisicaController();
 		EnderecoController endC = new EnderecoController();
-		
-		
+
 		String cpf = "456";
 
-		
 		//Inserindo
-		
-		String msg = "CPF JA EXISTE";
-		Erro erro = new Erro("CPF JA ");
-		if(!pfc.existeCPF(pf.getCPF())){ // se o cpf não existe ele cadastra no banco
-			
+
+		Erro erro = new Erro("CPF JA EXISTE");
+		if(!pfc.existeCPF(pf.getCpf())){ // se o cpf não existe ele cadastra no banco
+
 			pfc.gravar(pf);
 		}else
 			erro.handle(null);
-		
-		
+
+
 		//fim do Inserindo
-		  
-		 
-		
+
 		/*
 		//Excluindo
 		String cpf = "1235";
-		
+
 		if (!pfc.existeCPF(cpf))
 			System.out.println("usuario  não encontrado");
 		else {
@@ -107,50 +99,54 @@ public class Main extends Application {
 
 		}
 		//Fim do excluindo
-		 * 
+		 *
 		 */
 
 		/*
-		 * 
-		 
+		 *
+
 		//Alterando
 
 		PessoaFisica pf = null;
 		Endereco end = null;
-			
+
 		pf = pfc.exibir(cpf);
-			
+
 		pf.setNome("elelelel");
 		pf.setTelefone("7777");
 		pf.setSexo("gay");
 		pf.setDataNasc("31/31/31");
-		
+
 		//end = endC.exibirEndereco(pf.getId_end());
-		
+
 		end.setRua("lalalala");
 		end.setBairro("geisel");
 		end.setNumero(45);
 		end.setCEP("4545");
 		end.setComplemento("hdhdhdhd");
-		
-		pf.setEndereco(end);		
-		
+
+		pf.setEndereco(end);
+
 		pfc.alterar(pf);
-			
+
 		*/
-		//Fim do Alterando	
-		
-		
-		
+		//Fim do Alterando
+
+
+
 		//Fim do Testando
-		
-		
+
+
 		// BUTTONS MENU
 		subAbrir.setOnAction(new Cadastro());
 		subEditar.setOnAction(new Editar());
-		subBuscar.setOnAction(new Buscar());
+		subExibir.setOnAction(new Buscar());
 		subFechar.setOnAction(new Fechar());
+
 		subRelatorio.setOnAction(new Relatorio());
+		subSaque.setOnAction(new Saque());
+		subDeposito.setOnAction(new Deposito());
+
 		subEspecial.setOnAction(new Especial());
 	}
 }

@@ -9,32 +9,25 @@ public class EnderecoController {
 	private EnderecoDAO endDAO;
 
 	public EnderecoController() {
-
 		this.endDAO = new EnderecoDAO();
-
 	}
 
 	public void gravar() {
 
 	}
 
-	
-	
 	public Endereco exibirEndereco(int id_end){
-		
 		Endereco end = null;
-		
+
 		try {
 			end = this.endDAO.getByEndereco(id_end);
 		} catch (ConexaoException e) {
 			System.out.println(e);
 		}
-		
 		return end;
 	}
-	
-	public boolean remover(int id_end) {
 
+	public boolean remover(int id_end) {
 		boolean status = false;
 
 		try {
@@ -42,28 +35,18 @@ public class EnderecoController {
 		} catch (ConexaoException e) {
 			System.out.println(e);
 		}
-
 		return status;
 	}
-	
-	
+
 	public boolean alterar(Endereco end){
-		
+
 		boolean status = false;
-		
-		
+
 		try {
 			this.endDAO.update(end);
 		} catch (ConexaoException e) {
 			System.out.println(e);
 		}
-		
 		return status;
-		
-		
-		
-		
-		
 	}
-
 }

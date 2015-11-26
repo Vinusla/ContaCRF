@@ -3,6 +3,7 @@ package contacrf.gui;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.text.Font;
 
 public class Botoes {
@@ -21,15 +22,17 @@ public class Botoes {
 
 	// CAIXAS
 	private TextField tf1 = new TextField(); // NOME
-	private TextField tf2 = new TextField(); //
-	private TextField tf3 = new TextField(); // ENDEREÇO
-	private TextField tf4 = new TextField(); // BAIRRO
-	private TextField tf5 = new TextField(); // COMPLEMENTO
-	private TextField tf6 = new TextField(); // NUMERO
-	private TextField tf7 = new TextField(); //
-	private TextField tf8 = new TextField(); //
-	private TextField tf9 = new TextField(); //
-	// DATA NASCIMENTO
+	private TextField tf2 = new TextField(); // DATA NASCIMENTO
+	private TextField tf3 = new TextField(); // CPF
+	private TextField tf4 = new TextField(); // ENDEREÇO
+	private TextField tf5 = new TextField(); // NUMERO
+	private TextField tf6 = new TextField(); // COMPLEMENTO
+	private TextField tf7 = new TextField(); // BAIRRO
+	private TextField tf8 = new TextField(); // CEP
+	private TextField tf9 = new TextField(); //	TELEFONE
+	private TextField tf10 = new TextField(); // CIDADE
+	private TextField tf11 = new TextField(); // RG
+	//
 	// CONTA
 	// AGENCIA
 
@@ -70,6 +73,12 @@ public class Botoes {
 	public TextField getTf9() {
 		return tf9;
 	}
+	public TextField getTf10() {
+		return tf10;
+	}
+	public TextField getTf11() {
+		return tf11;
+	}
 	public ComboBox<String> getCbsexo() {
 		return cbsexo;
 	}
@@ -97,16 +106,26 @@ public class Botoes {
 		this.getDeposito().setFont(Font.font(14));
 		this.getSaldo().setFont(Font.font(14));
 		// TAMANHO DO TextField
-		this.tf1.setPrefWidth(290); // NOME
+		this.tf1.setPrefWidth(185); // NOME
 		this.tf2.setPrefWidth(95); // DATA NASCIMENTO
 		this.tf2.setPromptText("DIA/MES/ANO");
-		this.tf3.setPrefWidth(100); // CPF
-		this.tf4.setPrefWidth(170); // ENDEREÇO
+		this.tf2.setTooltip(new Tooltip("DIA/MES/ANO"));
+		this.tf3.setPrefWidth(110); // CPF
+		this.tf3.setPromptText("XXX-XXX-XXX-XX");
+		this.tf3.setTooltip(new Tooltip("XXX-XXX-XXX-XX"));
+		this.tf4.setPrefWidth(180); // ENDEREÇO
 		this.tf5.setPrefWidth(60); // NUMERO
 		this.tf6.setPrefWidth(120); // COMPLEMENTO
-		this.tf7.setPrefWidth(80); // BAIRRO
-		this.tf8.setPrefWidth(90); // CEP
-		this.tf9.setPrefWidth(117); // TELEFONE
+		this.tf7.setPrefWidth(100); // BAIRRO
+		this.tf8.setPrefWidth(100); // CEP
+		this.tf8.setPromptText("XXXXX-XXX");
+		this.tf8.setTooltip(new Tooltip("XXXXX-XXX"));
+		this.tf9.setPrefWidth(127); // TELEFONE
 		this.tf9.setPromptText("(DDD)9____-____");
+		this.tf9.setTooltip(new Tooltip("(DDD)9____-____"));
+		this.tf10.setPrefWidth(90);	// CIDADE
+		this.tf11.setPrefWidth(90); // RG
+		this.tf11.setPromptText("XXX-XXX-XXX");
+		this.tf11.setTooltip(new Tooltip("XXX-XXX-XXX"));
 	}
 }

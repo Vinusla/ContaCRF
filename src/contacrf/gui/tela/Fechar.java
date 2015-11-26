@@ -2,34 +2,59 @@ package contacrf.gui.tela;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
 
 public class Fechar implements EventHandler<ActionEvent>{
+
 	public void handle(ActionEvent evento) {
-		Dialog<ButtonType> dialog = new Dialog<>();
-		TextField txf = new TextField();
-		dialog.setTitle("Zathura Enterprise ™");
-		dialog.setHeaderText("Selecione o cliente");
-		txf.setPrefWidth(200);
-		txf.setPromptText("CPF");
-		HBox hb = new HBox(10);
-		hb.getChildren().addAll(txf);
-		dialog.getDialogPane().setContent(hb);
+		Alert dialogoAviso = new Alert(Alert.AlertType.WARNING);
+		GridPane cena = new GridPane();
+		cena.setPadding(new Insets(20,35,20,35));
+		cena.setAlignment(Pos.TOP_CENTER);
+		dialogoAviso.setTitle("Zathura Enterprise ™");
+	    dialogoAviso.setHeaderText("Você tem certeza que deseja excluir todos os seus dados ?");
 
-		ButtonType buttonTypeB = new ButtonType("Buscar", ButtonData.OK_DONE);
-		ButtonType buttonTypeV = new ButtonType("Voltar", ButtonData.CANCEL_CLOSE);
-		dialog.getDialogPane().getButtonTypes().addAll(buttonTypeB,buttonTypeV);
+	    Buscar busca = new Buscar();
+	    busca.handle(null);
+	    ButtonType btSim = new ButtonType("Sim");
+	    ButtonType btOk = new ButtonType("OK");
+	    ButtonType btVoltar = new ButtonType("Voltar",ButtonData.CANCEL_CLOSE);
+	    Separator separator = new Separator();
+	    //separator.setPrefWidth(100);
+	   	VBox vb = new VBox(10);
+	   	vb.getChildren().addAll(new Label("Dados"), separator);
+	    HBox hb1 = new HBox(10);
+		hb1.getChildren().addAll(new Label(busca.getNome()));
 
-		dialog.showAndWait().ifPresent(ok->{
-			if(ok == buttonTypeB){
-				String scan;
-				scan = txf.getText();
-				System.out.println(scan);
+		cena.add(vb, 0, 0);
+		cena.add(hb1, 0, 1);
+		dialogoAviso.getDialogPane().setContent(cena);
+	    dialogoAviso.getButtonTypes().setAll(btSim,btVoltar);
+	    dialogoAviso.showAndWait().ifPresent(ok -> {
+	    if ( ok == btSim){
+	    	// LIMPAR ARQUIVO
+	    	Alert dialogoAviso2 = new Alert(Alert.AlertType.WARNING);
+	    	dialogoAviso2.setTitle("Zathura Enterprise ™");
+	    	try {
+				dialogoAviso2.setHeaderText("EXCLUIDO COM SUCESSO!");
+		    	dialogoAviso2.setContentText("");
+			} catch (Exception e) {
+				dialogoAviso2.setHeaderText("Nao foi possivel!");
+				dialogoAviso2.setContentText("");
 			}
-		});
+	    	dialogoAviso2.getButtonTypes().setAll(btOk);
+	    	dialogoAviso2.show();
+	    }
+	    });
 	}
 }
