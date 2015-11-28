@@ -33,7 +33,7 @@ public class Saldo implements EventHandler<ActionEvent>{
 		HBox hb = new HBox(10);
 		hb.getChildren().addAll(new Label("Numero"),txt1);
 		HBox hb1 = new HBox(10);
-		hb1.getChildren().addAll(new Label("Agencia   6585-X"));	// TROCAR PELO O REAL NUMERO
+		hb1.getChildren().addAll(new Label("Agencia   6585-X"));
 		VBox vb = new VBox(10);
 		vb.getChildren().addAll(hb,hb1);
 		dialog.getDialogPane().setContent(vb);

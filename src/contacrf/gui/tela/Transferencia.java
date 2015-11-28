@@ -78,11 +78,11 @@ public class Transferencia implements EventHandler<ActionEvent>{
 					}
 		 */
 					HBox hb3 = new HBox(10);
-					hb3.getChildren().addAll(new Label("Numero do titular 4651-X"), new Label("Agencia 45613-X"));
+					hb3.getChildren().addAll(new Label("Numero do titular 4651-X"), new Label("Agencia 6585-X"));
 					HBox hb4 = new HBox(10);
 					//hb4.getChildren().addAll(new Label(pfT.getNome()));
 					HBox hb5 = new HBox(10);
-					hb5.getChildren().addAll(new Label("Numero de destinatorio 8885-X"), new Label("Agencia 45613-X"));
+					hb5.getChildren().addAll(new Label("Numero de destinatorio 8885-X"), new Label("Agencia 6585-X"));
 					HBox hb6 = new HBox(40);
 					//hb6.getChildren().addAll(new Label(pfD.getNome()));
 
@@ -101,7 +101,7 @@ public class Transferencia implements EventHandler<ActionEvent>{
 					Optional<ButtonType> result = alert.showAndWait();
 					if (result.get() == ButtonType.OK) {
 						//if( pfTsaldo >= valor){				// REALIZAR OPERAÇAO
-						InfoOk info = new InfoOk("Saldo", 20);
+						InfoOk info = new InfoOk("Saldo", 20);	// conta.getSaldo
 						info.handle(null);
 					} else { //if( pfTsaldo < valor){
 						Erro erro = new Erro("Saldo insuficiente!");

@@ -6,12 +6,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class Botoes {
 	// BUTTON's MENU
-	private final Button Deposito = new Button(" Deposito ");
-	private final Button Saldo = new Button(" Saldo ");
-	private final Button Transferencia = new Button(" Transferencia ");
+	private final Button Deposito = new Button(" DEPOSITO ");
+	private final Button Saldo = new Button(" SALDO ");
+	private final Button Transferencia = new Button(" TRANSFERENCIA ");
+	private final Button Saque = new Button(" SAQUE ");
 	private final PasswordField password = new PasswordField();
 	private final ComboBox<String> cbsexo = new ComboBox<>();
 	private final ComboBox<String> cbest = new ComboBox<>();
@@ -46,6 +48,9 @@ public class Botoes {
 	}
 	public Button getTransferencia() {
 		return Transferencia;
+	}
+	public Button getSaque() {
+		return Saque;
 	}
 	public TextField getTf1() {
 		return tf1;
@@ -147,9 +152,10 @@ public class Botoes {
 		this.cbest.getItems().addAll(this.estado);
 		this.listaCli.getItems().addAll("Mateus", "Gustavo", "Pedro", "Vinicius");
 		// CONFIG FONTE
-		this.getTransferencia().setFont(Font.font(14));
-		this.getDeposito().setFont(Font.font(14));
-		this.getSaldo().setFont(Font.font(14));
+		this.getTransferencia().setFont(Font.font("Courier New", FontWeight.THIN, 14));
+		this.getDeposito().setFont(Font.font("Courier New", FontWeight.THIN, 14));
+		this.getSaque().setFont(Font.font("Courier New", FontWeight.THIN, 14));
+		this.getSaldo().setFont(Font.font("Courier New", FontWeight.THIN, 14));
 		// TAMANHO DO TextField
 		this.tf1.setPrefWidth(185); // NOME
 		this.tf2.setPrefWidth(95); 	// DATA NASCIMENTO

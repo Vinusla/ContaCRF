@@ -39,7 +39,7 @@ public class Saque implements EventHandler<ActionEvent>{
 		HBox hb = new HBox(10);
 		hb.getChildren().addAll(new Label("Numero"),txt1);
 		HBox hb1 = new HBox(10);
-		hb1.getChildren().addAll(new Label("Agencia   6585-X"));	// TROCAR PELO O REAL NUMERO
+		hb1.getChildren().addAll(new Label("Agencia   6585-X"));
 		VBox vb = new VBox(10);
 		vb.getChildren().addAll(hb,hb1);
 		dialog.getDialogPane().setContent(vb);
@@ -52,7 +52,7 @@ public class Saque implements EventHandler<ActionEvent>{
 				String scan;
 				scan = txt1.getText();
 
-				if (true) {
+				// if( conta.password.equals(scan)){
 					PessoaFisica pf = new PessoaFisica();
 					PessoaFisicaDAO pfd = new PessoaFisicaDAO();
 					PessoaFisicaController pfc = new PessoaFisicaController();
@@ -78,13 +78,15 @@ public class Saque implements EventHandler<ActionEvent>{
 					Optional<ButtonType> result = alert.showAndWait();
 					if (result.get() == ButtonType.OK) {
 						//if( saldo >= saque){				// REALIZAR OPERAÇAO
-						InfoOk info = new InfoOk("Saldo", 20);
+						InfoOk info = new InfoOk("Saldo", 20); // conta.getSaldo
 						info.handle(null);
 					} else {
 						Erro erro = new Erro("Saldo insuficiente!");
 						erro.handle(null);
 					}
-				}
+				//}else {
+					Erro erro = new Erro("Senha invalida");
+					erro.handle(null);
 			}
 		});
 	}

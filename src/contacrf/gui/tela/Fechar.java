@@ -46,7 +46,7 @@ public class Fechar implements EventHandler<ActionEvent> {
 			HBox hb1 = new HBox(10);
 			hb1.getChildren().addAll(new Label(pf.getNome()),new Label("CPF "+pf.getCpf()));
 			HBox hb2 = new HBox(10);
-			hb2.getChildren().addAll(new Label("Numero 4456-22"),new Label("Agencia 9658-X"));
+			hb2.getChildren().addAll(new Label("Numero 4456-22"),new Label("Agencia 6585-X"));
 			cena.add(vb, 0, 0);
 			cena.add(hb1, 0, 1);
 			cena.add(hb2, 0, 2);

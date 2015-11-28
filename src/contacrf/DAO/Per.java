@@ -8,11 +8,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import contacrf.model.PessoaFisica;
+
 public class Per {
-	public static void createCsvFile() {
+	public static void createCsvFile(PessoaFisica pf) {
 		// A estrutura try-catch é usada pois o objeto BufferedWriter exige que
-		// as
-		// excessões sejam tratadas
+		// as excessões sejam tratadas
 		try {
 
 			// Criação de um buffer para a escrita em uma stream
@@ -20,10 +21,10 @@ public class Per {
 					"tabela.csv"));
 
 			// Escrita dos dados da tabela
-			StrW.write("Nome;Telefone;Idade\n");
-			StrW.write("Juliana;6783-8490;23\n");
-			StrW.write("Tatiana;6743-7480;45\n");
-			StrW.write("Janice;6909-9380;21");
+			StrW.write("Nome;CPF;Telefone;Cidade;Rua;Numero;Bairro;Estado\n");
+			StrW.write(pf.getNome()+ ";" +pf.getCpf()+ ";" +pf.getTelefone()+ ";" +pf.getEndereco().getCidade()+
+				";" +pf.getEndereco().getRua()+ ";" +pf.getEndereco().getNumero()+ ";" +pf.getEndereco().getBairro()+
+				";" +pf.getEndereco().getEstado()+ "\n");
 			// Fechamos o buffer
 			StrW.close();
 		} catch (FileNotFoundException ex) {
@@ -51,12 +52,10 @@ public class Per {
 			// do arquivo
 			while ((Str = StrR.readLine()) != null) {
 				// Aqui usamos o método split que divide a linha lida em um
-				// array de String
-				// passando como parametro o divisor ";".
+				// array de String passando como parametro o divisor ";".
 				TableLine = Str.split(";");
 
-				// O foreach é usadao para imprimir cada célula do array de
-				// String.
+				// O foreach é usadao para imprimir cada célula do array de String.
 				for (String cell : TableLine) {
 					System.out.print(cell + " ");
 				}
@@ -69,11 +68,5 @@ public class Per {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-
-	}
-
-	public static void main(String[] args) {
-		createCsvFile();
-		readCsvFile();
 	}
 }

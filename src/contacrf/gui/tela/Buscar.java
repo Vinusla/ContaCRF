@@ -22,12 +22,11 @@ public class Buscar implements EventHandler<ActionEvent>{
 		return acho;
 	}
 	List<String> list = new ArrayList<String>();
-	public void handle(ActionEvent evento) {
+	public void handle(ActionEvent evento) {			// RECEBER LISTA DE PESSOA
 		Dialog<ButtonType> dialog = new Dialog<>();
 		ComboBox<String> combobox = new ComboBox<>();;
-		list.add("Fulano");
-        list.add("Ciclano");
-        list.add("Beltrano");
+		list.add("12345678911");
+
 		dialog.setTitle("Zathura Enterprise ™");
 		dialog.setHeaderText("Informe o CPF");
 		combobox.getItems().addAll(list);
@@ -42,13 +41,21 @@ public class Buscar implements EventHandler<ActionEvent>{
 
 		dialog.showAndWait().ifPresent(ok->{
 			if(ok == buttonTypeB ){
+				Erro erro = new Erro("Cliente não encontrado!");
 				if (combobox.getValue() != null){
-					nome = combobox.getValue();
-					System.out.println(nome);
-					this.acho = true;
+					for (String string : list) {
+						if(string == combobox.getValue()){
+							nome = combobox.getValue();
+							System.out.println(nome);
+							this.acho = true;
+						}
+					}
+					if(!acho){
+						erro.handle(null);
+						this.acho = false;
+					}
 				}
 				else {
-					Erro erro = new Erro("Cliente não encontrado!");
 					erro.handle(null);
 					this.acho = false;
 				}

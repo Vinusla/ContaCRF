@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -36,29 +37,22 @@ public class Cadastro implements EventHandler<ActionEvent>{
 		bot.setCbsexo("MASCULINO");
 		HBox hb1 = new HBox(10);
 		hb1.getChildren().addAll(new Label("Nome"),bot.getTf1(),new Label("RG"),bot.getTf11());
-
 		HBox hb2 = new HBox(10);
 		hb2.getChildren().addAll(new Label("Sexo"),bot.getCbsexo(),new Label("Data nascimento"),bot.getTf2());
-
 		HBox hb3 = new HBox(10);
 		hb3.getChildren().addAll(new Label("CPF"),bot.getTf3(),new Label("Fone"),bot.getTf9());
-
 		HBox hb4 = new HBox(10);
 		hb4.getChildren().addAll(new Label("\nEndereço"));
-
 		Separator separadorHorizontal = new Separator();
 		Separator separadorHorizontal1 = new Separator();
-
 		HBox hb5 = new HBox(10);
 		hb5.getChildren().addAll(new Label("Rua"),bot.getTf4(),new Label("Cidade"),bot.getTf10());
-
 		HBox hb6 = new HBox(10);
 		hb6.getChildren().addAll(new Label("Complemento"),bot.getTf6(),new Label("Bairro"),bot.getTf7());
-
 		HBox hb7 = new HBox(10);
 		hb7.getChildren().addAll(new Label("Estado"),bot.getCbest(),new Label("CEP"),bot.getTf8(),new Label("Num"),bot.getTf5());
 		HBox hb8 = new HBox(10);
-		hb8.getChildren().addAll(new Label("Password"),bot.getPassword(),new Label("Numero 32.555-88"),new Label("Agencia 12345-55"));
+		hb8.getChildren().addAll(new Label("Password"),bot.getPassword(),new Label("Numero 32.555-88"),new Label("Agencia 6585-X"));
 		cena.add(hb1, 0, 0);
 		cena.add(hb2, 0, 1);
 		cena.add(hb3, 0, 2);
@@ -70,11 +64,24 @@ public class Cadastro implements EventHandler<ActionEvent>{
 		cena.add(separadorHorizontal1, 0, 8);
 		cena.add(hb8, 0, 9);
 		dialog.getDialogPane().setContent(cena);
-
+				
 		//CONFIG BOTOES DO CANTO
 		ButtonType buttonTypeOk = new ButtonType("Cadastrar", ButtonData.OK_DONE);
 		ButtonType buttonTypeC = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
 		dialog.getDialogPane().getButtonTypes().addAll(buttonTypeOk,buttonTypeC);
+		
+		Node loginButton = dialog.getDialogPane().lookupButton(buttonTypeOk);
+		loginButton.setDisable(true);
+		bot.getPassword().textProperty().addListener((observable, oldValue, newValue) -> {
+			loginButton.setDisable(newValue.trim().isEmpty());
+		});
+		
+		Node loginButton1 = dialog.getDialogPane().lookupButton(buttonTypeOk);
+		loginButton1.setDisable(true);
+		bot.getTf3().textProperty().addListener((observable, oldValue, newValue) -> {
+			loginButton1.setDisable(newValue.trim().isEmpty());
+		});
+		
 		dialog.showAndWait().ifPresent(ok->{// EXIBE TELA E RECEBE VALORES DAS CAIXAS
 			if(buttonTypeOk == ok){
 				String scan;
@@ -119,15 +126,22 @@ public class Cadastro implements EventHandler<ActionEvent>{
 				scan = bot.getTf10().getText();		// CIDADE
 				end.setCidade(scan);
 				scan = bot.getPassword().getText(); // PASSWORD FALTA ADD
+				if(scan.length()!=6){
+					Erro erro = new Erro("Senha invalida");
+					erro.handle(null);
+					// password = scan
+				}
 				pf.setEndereco(end);
 
-				Erro erro = new Erro("CPF JA EXISTE");
+
 				if(!pfc.existeCPF(pf.getCpf())){ // se o cpf não existe ele cadastra no banco
 					pfc.gravar(pf);
 					InfoOk info = new InfoOk();
 					info.handle(null);
-				}else
+				}else{
+					Erro erro = new Erro("CPF JA EXISTE");
 					erro.handle(null);
+				}
 
 				System.out.println(pf);		// TEST APAGAR
 				System.out.println(scan);

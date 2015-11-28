@@ -26,7 +26,6 @@ public class Exibir implements EventHandler<ActionEvent> {
 		Buscar busca = new Buscar();
 		busca.handle(null);
 		if (busca.isAcho()) {
-
 			Endereco end = new Endereco();
 			EnderecoDAO endd = new EnderecoDAO();
 			PessoaFisica pf = new PessoaFisica();
@@ -59,7 +58,7 @@ public class Exibir implements EventHandler<ActionEvent> {
 			hb7.getChildren().addAll(new Label("Estado"), bot.getCbest(), new Label("CEP"), bot.getTf8(),
 					new Label("Num"), bot.getTf5());
 			HBox hb8 = new HBox(10);
-			hb8.getChildren().addAll(new Label("Numero 32.555-88"),new Label("Agencia 12345-55"));
+			hb8.getChildren().addAll(new Label("Numero 32.555-88"),new Label("Agencia 6585-X"));
 			cena.add(hb1, 0, 0);
 			cena.add(hb2, 0, 1);
 			cena.add(hb3, 0, 2);
@@ -71,7 +70,7 @@ public class Exibir implements EventHandler<ActionEvent> {
 			cena.add(hb8, 0, 9);
 			cena.add(separadorHorizontal1, 0, 8);
 			try {
-				pf = pfd.getByCpf("4444");
+				pf = pfd.getByCpf(busca.getNome()); // CONTEM CPF
 				end = endd.getByEndereco(pf.getId_end());
 			} catch (ConexaoException e) {
 				Erro erro = new Erro("Cliente não existe no sistema!!");

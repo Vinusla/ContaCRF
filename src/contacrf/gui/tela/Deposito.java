@@ -33,7 +33,7 @@ public class Deposito implements EventHandler<ActionEvent>{
 		HBox hb = new HBox(10);
 		hb.getChildren().addAll(new Label("Numero"),txfN);
 		VBox vb = new VBox(10);
-		vb.getChildren().addAll(new Label("Agencia X.XXX-X"),hb,txfV);
+		vb.getChildren().addAll(new Label("Agencia 6585-X"),hb,txfV);
 		alert.getDialogPane().setContent(vb);
 
 		ButtonType buttonV = new ButtonType("Voltar", ButtonData.CANCEL_CLOSE);
