@@ -89,4 +89,10 @@ public class Endereco {
 		this.cidade = cidade;
 	}
 
+	@Override
+	public String toString() {
+		return "Endereco ID " + id + "\nRua " + rua + "\nBairro " + bairro + "\nNumero " + numero + "\nCEP " + CEP
+				+ "\nComplemento " + complemento + "\nEstado " + estado + "\nCidade " + cidade;
+	}
+
 }

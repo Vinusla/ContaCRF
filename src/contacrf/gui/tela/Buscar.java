@@ -13,7 +13,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.HBox;
 
 public class Buscar implements EventHandler<ActionEvent>{
-	private String nome ;
+	private String nome ; 			// TEST
 	private boolean acho = false;
 	public String getNome() {
 		return nome;

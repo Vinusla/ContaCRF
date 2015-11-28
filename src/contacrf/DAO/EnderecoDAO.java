@@ -20,7 +20,7 @@ public class EnderecoDAO {
 	public int save(Endereco endereco, Connection conexao) throws ConexaoException {
 
 		PreparedStatement stmt;
-		String sql = "insert into endereco (rua, numero, bairro,CEP,complemento,estado,cidade) values (?,?,?,?,?,?)"; // FALTA CIDADE
+		String sql = "insert into endereco (rua, numero, bairro,CEP,complemento,estado,cidade) values (?,?,?,?,?,?,?)";
 		int id = 0;
 
 		try {
@@ -85,6 +85,7 @@ public class EnderecoDAO {
 				endereco.setCEP(rs.getString("cep"));
 				endereco.setComplemento(rs.getString("complemento"));
 				endereco.setEstado(rs.getString("estado"));
+				endereco.setCidade(rs.getString("cidade"));
 			}
 		} catch (SQLException e) {
 			throw new ConexaoException("Não foi possível realizar a busca do endereço");

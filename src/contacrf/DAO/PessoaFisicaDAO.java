@@ -33,7 +33,7 @@ public class PessoaFisicaDAO {
 		PreparedStatement stmt;
 		int idEnd = 0;
 
-		String sql = "insert into pessoafisica (cpf, nome,telefone,sexo,dataNasc,id_end,rg) values (?,?,?,?,?,?)"; // FALTA																												// RG
+		String sql = "insert into pessoafisica (cpf, nome,telefone,sexo,dataNasc,rg,id_end) values (?,?,?,?,?,?,?)";
 
 		try {
 
@@ -51,8 +51,9 @@ public class PessoaFisicaDAO {
 				stmt.setString(3, pf.getTelefone());
 				stmt.setString(4, pf.getSexo());
 				stmt.setString(5, pf.getDataNasc());
-				stmt.setInt(6, idEnd);
-				stmt.setString(7, pf.getRg());
+				stmt.setString(6, pf.getRg());
+				stmt.setInt(7, idEnd);
+
 
 				// executando
 				stmt.execute();
@@ -62,8 +63,8 @@ public class PessoaFisicaDAO {
 			String msg = "Conta já existe no sistema!";
 			Erro erro = new Erro(msg);
 			erro.handle(null);
-			throw new ConexaoException(
-					"Não foi possível preparar o banco para a inserção do registro na tabela pessoafisica");
+			//throw new ConexaoException("Não foi possível preparar o banco para a inserção do registro na tabela pessoafisica");
+			e.printStackTrace();
 		} catch (NullPointerException e) {
 			throw new EnderecoNullPointerException("Objeto do tipo Endereço não pode ser criado");
 
@@ -109,6 +110,7 @@ public class PessoaFisicaDAO {
 				pf.setSexo(rs.getString("sexo"));
 				pf.setDataNasc(rs.getString("dataNasc"));
 				pf.setId_end(rs.getInt("id_end"));
+				pf.setRg(rs.getString("rg"));
 			}
 		} catch (SQLException e) {
 			throw new ConexaoException(

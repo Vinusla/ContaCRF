@@ -44,8 +44,8 @@ public class Main extends Application {
 		menuInicio.getItems().addAll(subAbrir, subEditar, subExibir, subFechar,
 				new SeparatorMenuItem(), subExit); // ADD SUBMENU
 
-		Menu menuOperacoes = new Menu("_Operaçoes"); // MENU
-		MenuItem subRelatorio = new MenuItem("Gerar Relatorio");
+		Menu menuOperacoes = new Menu("_Operações"); // MENU
+		MenuItem subRelatorio = new MenuItem("Gerar Relatório");
 		MenuItem subSaque = new MenuItem("Saque");
 		MenuItem subDeposito = new MenuItem("Deposito");
 		MenuItem subSaldo = new MenuItem("Saldo");
@@ -79,15 +79,13 @@ public class Main extends Application {
 
 		Erro erro = new Erro("CPF JA EXISTE");
 		if(!pfc.existeCPF(pf.getCpf())){ // se o cpf não existe ele cadastra no banco
-
 			pfc.gravar(pf);
 		}else
 			erro.handle(null);
 
-
 		//fim do Inserindo
 
-		/*
+
 		//Excluindo
 		String cpf = "1235";
 
@@ -99,12 +97,8 @@ public class Main extends Application {
 
 		}
 		//Fim do excluindo
-		 *
-		 */
-
 		/*
 		 *
-
 		//Alterando
 
 		PessoaFisica pf = null;
@@ -132,21 +126,22 @@ public class Main extends Application {
 		*/
 		//Fim do Alterando
 
-
-
 		//Fim do Testando
 
 
 		// BUTTONS MENU
 		subAbrir.setOnAction(new Cadastro());
 		subEditar.setOnAction(new Editar());
-		subExibir.setOnAction(new Buscar());
+		subExibir.setOnAction(new Exibir());
 		subFechar.setOnAction(new Fechar());
 
-		subRelatorio.setOnAction(new Relatorio());
 		subSaque.setOnAction(new Saque());
 		subDeposito.setOnAction(new Deposito());
+		subSaldo.setOnAction(new Saldo());
+		subTransferencia.setOnAction(new Transferencia());
+		subRelatorio.setOnAction(new Relatorio());
 
 		subEspecial.setOnAction(new Especial());
+		subSobre.setOnAction(new InfoOk());
 	}
 }
