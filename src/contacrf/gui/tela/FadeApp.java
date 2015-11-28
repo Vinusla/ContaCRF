@@ -3,6 +3,7 @@ package contacrf.gui.tela;
 import contacrf.gui.Imagem;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -11,8 +12,10 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -28,13 +31,14 @@ public class FadeApp extends Application {
     private Pane splashLayout;
     private ProgressBar loadProgress;
     private Label progressText;
+    private Stage mainStage;
     private static final int SPLASH_WIDTH = 676;
     private static final int SPLASH_HEIGHT = 227;
-/*
+
     public static void main(String[] args) throws Exception {
         launch(args);
     }
-*/
+
     public void init() {
     	Imagem i = new Imagem();
         //ImageView splash = i.getImgScreen();
@@ -84,18 +88,25 @@ public class FadeApp extends Application {
 
                 return foundFriends;
             }
-        };
-        showSplash(
-                initStage,
-                friendTask
-        );
-        new Thread(friendTask).start();
-    }
+		};
+		showSplash(initStage, friendTask, () -> showMainStage(friendTask.valueProperty()));
+		new Thread(friendTask).start();
+	}
 
-    private void showSplash(
-            final Stage initStage,
-            Task<?> task ) {
-        progressText.textProperty().bind(task.messageProperty());
+	private void showMainStage(ReadOnlyObjectProperty<ObservableList<String>> friends) {
+		mainStage = new Stage(StageStyle.DECORATED);
+		mainStage.setTitle("My Friends");
+		mainStage.getIcons().add(new Image(APPLICATION_ICON));
+
+		final ListView<String> peopleView = new ListView<>();
+		peopleView.itemsProperty().bind(friends);
+
+		mainStage.setScene(new Scene(peopleView));
+		mainStage.show();
+	}
+
+	private void showSplash(final Stage initStage, Task<?> task, InitCompletionHandler initCompletionHandler) {
+		progressText.textProperty().bind(task.messageProperty());
         loadProgress.progressProperty().bind(task.progressProperty());
         task.stateProperty().addListener((observableValue, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
