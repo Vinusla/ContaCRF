@@ -1,15 +1,18 @@
 package contacrf.gui.tela;
 
-import contacrf.model.AutoCompleteComboBoxListener;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import contacrf.controller.PessoaFisicaController;
+import contacrf.exception.ConexaoException;
+import contacrf.model.AutoCompleteComboBoxListener;
+import contacrf.model.PessoaFisica;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.HBox;
 
 public class Buscar implements EventHandler<ActionEvent>{
@@ -21,15 +24,22 @@ public class Buscar implements EventHandler<ActionEvent>{
 	public boolean isAcho() {
 		return acho;
 	}
-	List<String> list = new ArrayList<String>();
-	public void handle(ActionEvent evento) {			// RECEBER LISTA DE PESSOA
+	List<PessoaFisica> listP = new ArrayList<PessoaFisica>();	// LISTA DE PESSOAS
+	List<String> listC = new ArrayList<String>();				// LISTA DE CPF
+	public void handle(ActionEvent evento) {
 		Dialog<ButtonType> dialog = new Dialog<>();
-		ComboBox<String> combobox = new ComboBox<>();;
-		list.add("12345678911");
-
+		ComboBox<String> combobox = new ComboBox<>();
+		PessoaFisicaController pfC = new PessoaFisicaController();
+		try {
+			listP = pfC.listaPessoaFisica();
+		} catch (ConexaoException e) {
+		}
+		for (int i = 0; i < listP.size(); i++) {
+			listC.add(listP.get(i).getCpf());
+		}
 		dialog.setTitle("Zathura Enterprise ™");
 		dialog.setHeaderText("Informe o CPF");
-		combobox.getItems().addAll(list);
+		combobox.getItems().addAll(listC);
 		new AutoCompleteComboBoxListener<>(combobox);
 		HBox hb = new HBox(10);
 		hb.getChildren().addAll(combobox);
@@ -43,7 +53,7 @@ public class Buscar implements EventHandler<ActionEvent>{
 			if(ok == buttonTypeB ){
 				Erro erro = new Erro("Cliente não encontrado!");
 				if (combobox.getValue() != null){
-					for (String string : list) {
+					for (String string : listC) {
 						if(string == combobox.getValue()){
 							nome = combobox.getValue();
 							System.out.println(nome);

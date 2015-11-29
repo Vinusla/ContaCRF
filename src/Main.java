@@ -93,7 +93,7 @@ public class Main extends Application {
                                  "Ajuda");
                 updateMessage("Inicializando ...");
                 for (int i = 0; i < availableFriends.size(); i++) {
-                    Thread.sleep(800);
+                    Thread.sleep(100); // MUDAR PARA 800
                     updateProgress(i + 1, availableFriends.size());
                     String nextFriend = availableFriends.get(i);
                     foundFriends.add(nextFriend);

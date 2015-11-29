@@ -27,19 +27,7 @@ public class EnderecoController {
 		return end;
 	}
 
-	public boolean remover(int id_end) {
-		boolean status = false;
-
-		try {
-			status = this.endDAO.remove(id_end);
-		} catch (ConexaoException e) {
-			System.out.println(e);
-		}
-		return status;
-	}
-
 	public boolean alterar(Endereco end){
-
 		boolean status = false;
 
 		try {

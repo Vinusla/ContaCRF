@@ -16,7 +16,8 @@ public class EnderecoDAO {
 	private Endereco endereco;
 
 	// Inserir no banco de dados
-	//obs: não abro e nem fecho uma conexão pela razão do metodo save de pessoaFisicaDAO chamar esse metodo, logo o save de pessoaFisicaDAO já abre e fecha uma conexão
+	//OBS: não abro e nem fecho uma conexão pela razão do metodo save de pessoaFisicaDAO
+	//chamar esse metodo, logo o save de pessoaFisicaDAO já abre e fecha uma conexão
 	public int save(Endereco endereco, Connection conexao) throws ConexaoException {
 
 		PreparedStatement stmt;
@@ -160,7 +161,7 @@ public class EnderecoDAO {
 
 		boolean status = false;
 		PreparedStatement stmt = null;
-		String sql = "update endereco set rua = ?, numero = ?, bairro = ?, cep = ?, complemento = ? , estado = ? where id = ?";
+		String sql = "update endereco set rua = ?, numero = ?, bairro = ?, cep = ?, complemento = ? , estado = ?, cidade = ? where id = ?";
 
 		try {
 			stmt = this.conexao.prepareStatement(sql);
@@ -171,7 +172,8 @@ public class EnderecoDAO {
 			stmt.setString(4, end.getCEP());
 			stmt.setString(5, end.getComplemento());
 			stmt.setString(6, end.getEstado());
-			stmt.setInt(7, end.getId());
+			stmt.setString(7, end.getCidade());
+			stmt.setInt(8, end.getId());
 
 			stmt.execute();
 			status = true;

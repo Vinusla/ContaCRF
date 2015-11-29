@@ -6,6 +6,4 @@ public class PessoaFisicaNullPointerException extends Exception {
 		super(msg);
 	}
 
-	
-
 }

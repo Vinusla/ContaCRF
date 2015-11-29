@@ -37,7 +37,6 @@ public class Editar implements EventHandler<ActionEvent>{
 			PessoaFisica pf = new PessoaFisica();
 			PessoaFisicaDAO pfd = new PessoaFisicaDAO();
 			PessoaFisicaController pfc = new PessoaFisicaController();
-			Conta conta = new Conta(); 		// FALTA
 			Botoes bot = new Botoes();
 			Dialog<ButtonType> dialog = new Dialog<>();
 			dialog.setTitle("Zathura Enterprise ™");
@@ -73,7 +72,7 @@ public class Editar implements EventHandler<ActionEvent>{
 			cena.add(hb7, 0, 7);
 			cena.add(separadorHorizontal1, 0, 8);
 			try {
-				pf = pfd.getByCpf("12345678911");
+				pf = pfd.getByCpf(busca.getNome());
 				end = endd.getByEndereco(pf.getId_end());
 			} catch (ConexaoException e) {
 				Erro erro = new Erro("Cliente não existe no sistema!!");
@@ -129,7 +128,12 @@ public class Editar implements EventHandler<ActionEvent>{
 				end.setCidade(scan);
 
 				pf.setEndereco(end);
-				pfc.alterar(pf);
+				try {
+					pfc.alterar(pf);
+				} catch (ConexaoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				InfoOk info = new InfoOk();
 				info.handle(null);

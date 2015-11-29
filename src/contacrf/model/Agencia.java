@@ -4,19 +4,18 @@ import java.util.Map;
 
 public class Agencia {
 
-	private Map<String, Conta> contas;
-	private String numero;
+	private Map<String, ContaCorrente> contas;
+	private final String numero = "6585-X";
 
-	public Agencia(String numero) {
-		super();
-		this.numero = numero;
+	public String getNumero() {
+		return numero;
 	}
 
-	public Conta criarConta(String numero) {
+	public ContaCorrente criarConta(String numero) {
 		return null;
 	}
 
-	public Conta getConta(String numero) {
+	public ContaCorrente getConta(String numero) {
 		return null;
 	}
 }
