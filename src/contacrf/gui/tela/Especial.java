@@ -154,7 +154,13 @@ public class Especial implements EventHandler<ActionEvent>{
 			ButtonType buttonTypeOk = new ButtonType("Voltar", ButtonData.OK_DONE);
 			dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
 			dialog.getDialogPane().setContent(cena);
-			dialog.show();
+			dialog.showAndWait().ifPresent(ok->{
+				if(ok == buttonTypeOk){
+					this.dia.clear();
+					this.historico.clear();
+					this.valor.clear();
+				}
+			});
 		}
 	}
 	public String toDia(){

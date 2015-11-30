@@ -94,14 +94,17 @@ public class Conta {
 
 	}
 
-	public void tranferencia(Conta contaDestino, float valor) throws SaldoInsuficienteException, ValorNegativoException {
-
+	public void tranferencia(ContaCorrente contaOrigem,ContaCorrente contaDestino, float valor) throws SaldoInsuficienteException, ValorNegativoException, ConexaoException {
+		ContaCorrenteController cc = new ContaCorrenteController();
 		if (valor < 0 ) {
 			throw new ValorNegativoException("Valor não pode ser negativo");
 		} else if (this.getSaldo() - valor < 0) {
 			throw new SaldoInsuficienteException("Saldo Insuficiente");
 		}
-		setSaldo(-valor);
+		contaDestino.setSaldo(contaDestino.getSaldo() + valor);
+		cc.alterar(contaDestino);
+		contaOrigem.setSaldo(contaOrigem.getSaldo() - valor);
+		cc.alterar(contaOrigem);
 		//Transacao novaTransacao = new Transacao(new Date(), valor, "TRANSFERÊNCIA");
 		//this.movimentacao(novaTransacao);
 	}
