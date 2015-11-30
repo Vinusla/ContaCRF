@@ -40,7 +40,7 @@ public class ContaCorrenteController {
 	}
 
 	//Retorna uma conta
-	public Conta exibir(String numConta) throws ConexaoException{
+	public ContaCorrente exibir(String numConta) throws ConexaoException{
 		ContaCorrente cc = null;
 
 		try {
@@ -51,6 +51,22 @@ public class ContaCorrenteController {
 		}
 
 		return cc;
+	}
+
+	// retorna o numero da conta atravs do cpf
+	public String getNumeroConta(String cpfCliente) {
+
+		String numConta = null;
+
+		try {
+			numConta = ccdao.getByNumConta(cpfCliente);
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return numConta;
+
 	}
 
 	//Bloquea uma conta
