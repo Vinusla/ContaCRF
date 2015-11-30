@@ -12,6 +12,11 @@ import contacrf.gui.Botoes;
 import contacrf.model.Conta;
 import contacrf.model.Endereco;
 import contacrf.model.PessoaFisica;
+import contacrf.util.CepValidador;
+import contacrf.util.CpfValidador;
+import contacrf.util.DataValidador;
+import contacrf.util.MascaraDeFormatacao;
+import contacrf.util.TelefoneValidador;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -79,16 +84,34 @@ public class Editar implements EventHandler<ActionEvent>{
 				erro.handle(null);
 			}
 			bot.getTf1().setText(pf.getNome());	//	NOME
-			bot.getTf2().setText(pf.getDataNasc());	//	DATA NASCIMENTO
-			bot.getTf3().setText(pf.getCpf());	//	CPF
+			
+			//formata a data de nascimento para xx/xx/xxxx
+			String dtNascFormatado = MascaraDeFormatacao.formatar("##/##/####", pf.getDataNasc());
+			bot.getTf2().setText(dtNascFormatado); // DATA NASCIMENTO
+			
+			//formata o numero da conta para xxxxx-x
+			String CpfFormatado = MascaraDeFormatacao.formatar("###.###.###-##", pf.getCpf());				
+			bot.getTf3().setText(CpfFormatado);	//	CPF
+			
 			bot.getTf4().setText(end.getRua());	//	RUA
 			bot.getTf5().setText(Integer.toString(end.getNumero()));	//	NUM
 			bot.getTf6().setText(end.getComplemento());	//	COMPLEMENTO
 			bot.getTf7().setText(end.getBairro());	//	BAIRRO
-			bot.getTf8().setText(end.getCEP());	//	CEP
-			bot.getTf9().setText(pf.getTelefone());	//	TELEFONE
+			
+			//formata o cep para xxxxx-xxx
+			String cepFormatado = MascaraDeFormatacao.formatar("#####-###", end.getCEP());			
+			bot.getTf8().setText(cepFormatado); // CEP
+			
+			//formata o telefone para (xx) x xxxx-xxxx
+			String telefoneFormatado = MascaraDeFormatacao.formatar("(##) # ####-####", pf.getTelefone());
+			bot.getTf9().setText(telefoneFormatado); // TELEFONE
+			
+			
 			bot.getTf10().setText(end.getCidade());	//	CIDADE
-			bot.getTf11().setText(pf.getRg());	//	RG
+			
+			
+			bot.getTf11().setText(pf.getRg()); // RG
+			
 			bot.setCbsexo(pf.getSexo());
 			bot.setCbest(end.getEstado());	// ESTADO
 			bot.getPassword();
@@ -99,44 +122,100 @@ public class Editar implements EventHandler<ActionEvent>{
 			dialog.getDialogPane().getButtonTypes().addAll(buttonTypeA, buttonTypeV);
 			Optional<ButtonType> result = dialog.showAndWait();
 			if (result.get() == buttonTypeA) {
-				String scan;
-				scan = bot.getTf1().getText(); 		// NOME
-				pf.setNome(scan);
-				scan = bot.getTf11().getText();		// RG
-				pf.setRg(scan);
-				scan = bot.getCbsexo().getValue();	// SEXO
-				pf.setSexo(scan);
-				scan = bot.getTf9().getText();		// TELEFONE
-				pf.setTelefone(scan);
-				scan = bot.getTf2().getText();		// DATA
-				pf.setDataNasc(scan);
-				scan = bot.getTf3().getText();		// CPF
-				pf.setCpf(scan);
-				scan = bot.getTf4().getText();		// RUA
-				end.setRua(scan);
-				scan = bot.getTf5().getText();		// NUMERO
-				end.setNumero(Integer.parseInt(scan));
-				scan = bot.getCbest().getValue();	// ESTADO
-				end.setEstado(scan);
-				scan = bot.getTf6().getText();		// COMPLEMENTO
-				end.setComplemento(scan);
-				scan = bot.getTf7().getText();		// BAIRRO
-				end.setBairro(scan);
-				scan = bot.getTf8().getText();		//CEP
-				end.setCEP(scan);
-				scan = bot.getTf10().getText();		// CIDADE
-				end.setCidade(scan);
-
-				pf.setEndereco(end);
-				try {
-					pfc.alterar(pf);
-				} catch (ConexaoException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				
+				if(bot.getTf1().getText().equals("") || bot.getTf2().getText().equals("") || bot.getTf3().getText().equals("")
+						|| bot.getTf4().getText().equals("") || bot.getTf5().getText().equals("") || bot.getTf7().getText().equals("") 
+						|| bot.getTf8().getText().equals("") || bot.getTf9().getText().equals("") || bot.getTf10().getText().equals("") 
+						|| bot.getTf11().getText().equals("") || bot.getCbest().getValue() == null){
+					
+					Erro erro = new Erro("Todos os Campos são obrigatórios exceto o campo complemento");
+					erro.handle(null);
+					return;
+				}else{				
+				
+					String scan;
+					scan = bot.getTf1().getText(); 		// NOME
+					pf.setNome(scan);
+					scan = bot.getTf11().getText();		// RG
+					pf.setRg(scan);
+					scan = bot.getCbsexo().getValue();	// SEXO
+					pf.setSexo(scan);
+					
+					
+					
+					//valida o telefone	
+					if(!TelefoneValidador.isTelefone(scan = bot.getTf9().getText())){
+					    Erro erro = new Erro("Telefone Inválido");
+						erro.handle(null);
+						return;
+					}	
+					
+					//retira os parenteses e -				      
+				    scan = scan.replaceAll("[\\D]", "");
+					pf.setTelefone(scan);
+					
+					
+					//valida a data	
+					if(!DataValidador.isData(scan = bot.getTf2().getText())){
+					    Erro erro = new Erro("Cpf Inválido");
+						erro.handle(null);
+						return;
+					}
+					
+					//retira as barras				      
+				    scan = scan.replaceAll("[\\D]", "");					
+					pf.setDataNasc(scan);
+					
+					
+					//valida o cpf	
+					if(!CpfValidador.validaCpf(scan = bot.getTf3().getText())){
+					    Erro erro = new Erro("Cpf Inválido");
+						erro.handle(null);
+						return;
+					}
+					
+					//retira os ponto e espaços 
+				    scan = bot.getTf3().getText();  
+				    scan = scan.replaceAll("[\\D]", "");
+				    pf.setCpf(scan);
+					
+				    scan = bot.getTf4().getText();		// RUA
+					end.setRua(scan);
+					scan = bot.getTf5().getText();		// NUMERO
+					end.setNumero(Integer.parseInt(scan));
+					scan = bot.getCbest().getValue();	// ESTADO
+					end.setEstado(scan);
+					scan = bot.getTf6().getText();		// COMPLEMENTO
+					end.setComplemento(scan);
+					scan = bot.getTf7().getText();		// BAIRRO
+					end.setBairro(scan);
+					
+					
+					//valida o cep	
+					if(!CepValidador.isCep(scan = bot.getTf8().getText())){
+					    Erro erro = new Erro("Cep Inválido");
+						erro.handle(null);
+						return;
+					}	
+					
+					//retira os parenteses e -				      
+					scan = scan.replaceAll("[\\D]", "");					
+					end.setCEP(scan);
+					
+					scan = bot.getTf10().getText();		// CIDADE
+					end.setCidade(scan);
+	
+					pf.setEndereco(end);
+					try {
+						pfc.alterar(pf);
+					} catch (ConexaoException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	
+					InfoOk info = new InfoOk();
+						info.handle(null);
 				}
-
-				InfoOk info = new InfoOk();
-				info.handle(null);
 			}
 		}
 	}

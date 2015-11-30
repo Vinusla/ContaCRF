@@ -103,6 +103,51 @@ public class ContaCorrenteDAO {
 		return cc;
 	}
 
+	
+	// Retorna o numero da conta de acordo com o cpf passado por parâmetro
+		public String getByNumConta(String cpfCliente) throws ConexaoException {
+
+			// Abrindo a conexão com o banco
+			try {
+			this.conexao = ConnectionFactory.getInstance().getConnection();
+			}catch (ConexaoException e) {
+			System.out.println(e);
+			}
+
+			String numConta = null;
+			PreparedStatement stmt = null;
+			String sql = "select * from conta where cpf_pesF = " + cpfCliente;
+
+			try {
+				// preparando a busca dentro do banco de dados
+				stmt = this.conexao.prepareStatement(sql);
+				ResultSet rs = stmt.executeQuery();
+				
+				while (rs.next()) {
+					if(rs.getString("cpf_pesF").equals(cpfCliente))
+						numConta = rs.getString("num_conta");
+				}
+				
+				} catch (SQLException e) {
+					throw new ConexaoException(	"Não foi possível preparar o banco para a a busca de dados pelo numero do cpf na tabela conta");
+				} finally {
+		
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					throw new ConexaoException("Não foi possível fechar a busca de conta corrente pelo numero do cpf");
+				}
+					// Fechando a conexão com o banco
+				try {
+					if (conexao != null)
+						ConnectionFactory.getInstance().fecharConexao();
+				} catch (ConexaoException e) {
+					throw new ConexaoException(	"Não foi possível fechar a conexão com o banco");
+				}
+			}
+				return numConta;
+		}
+	
 	//Altera is dadis da conta do cliente
 	public boolean update(ContaCorrente cc) throws ConexaoException{
 		// Abrindo a conexão com o banco

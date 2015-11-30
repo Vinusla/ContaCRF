@@ -7,6 +7,7 @@ import contacrf.controller.ContaCorrenteController;
 import contacrf.controller.PessoaFisicaController;
 import contacrf.exception.ConexaoException;
 import contacrf.model.PessoaFisica;
+import contacrf.util.MascaraDeFormatacao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,32 +24,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class Listar implements EventHandler<ActionEvent>{
-	List<String> pfN = new ArrayList<String>();
-	List<String> pfC = new ArrayList<String>();
-	List<String> lc= new ArrayList<String>();
-
-	public String toNome(){
-		String n = "";
-		pfN.add("Nome");
-		for (String string : pfN) {
-			n += string +"\n";
-		}
-		return n + "\n";
-	}
-	public String toCPF(){
-		String c = "";
-		for (String string : pfC) {
-			c += string +"\n";
-		}
-		return c + "\n";
-	}
-	public String toConta() {
-		String v = "";
-		for ( String num : lc) {
-			 v += num +"\n";
-		}
-		return v + "\n";
-	}
+	
+	
 
 	public void handle(ActionEvent event) {
 		BorderPane pane = new BorderPane();
@@ -59,16 +36,24 @@ public class Listar implements EventHandler<ActionEvent>{
 		ContaCorrenteController cc = new ContaCorrenteController();
 		PessoaFisicaController pfc = new PessoaFisicaController();
 		PessoaFisica pf = new PessoaFisica();
+		
+		List<String> pfN = new ArrayList<String>();
+		List<String> pfC = new ArrayList<String>();
+		List<String> lc= new ArrayList<String>();
 
+		
+		
 		try {
 			for (int i = 0; i < cc.listarContas().size(); i++) {
 				if ('1' == cc.listarContas().get(i).getAtivo()) {
-					lc.add(cc.listarContas().get(i).getNumero());
+					lc.add(MascaraDeFormatacao.formatar("#####-#", cc.listarContas().get(i).getNumero()));
 					pf = pfc.exibir(cc.listarContas().get(i).getCpfCliente());
 					pfN.add(pf.getNome());
-					pfC.add(pf.getCpf());
+					pfC.add( MascaraDeFormatacao.formatar("###.###.###-##", pf.getCpf()));
 				}
-			}
+			}			
+			
+			
 		} catch (ConexaoException e) {
 			Erro erro = new Erro ("Carregamento de dados não concluido");
 			erro.handle(null);
@@ -106,10 +91,14 @@ public class Listar implements EventHandler<ActionEvent>{
 	    nome3.setFont(Font.font("Courier New", FontWeight.THIN, 14));
 	    vbCPF.getChildren().addAll(nome3,listCPF);
 
+	    
+	    
 	    pane.setLeft(vbC); // CONTA
 		pane.setCenter(vbN); // NOME
 		pane.setRight(vbCPF); // CPF
 		stage.setScene(scene);
 		stage.showAndWait();
+		
+		
 	}
 }

@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
+import contacrf.controller.ContaCorrenteController;
+import contacrf.exception.ConexaoException;
 import contacrf.exception.SaldoInsuficienteException;
 import contacrf.exception.ValorNegativoException;
 
@@ -104,12 +106,15 @@ public class Conta {
 		//this.movimentacao(novaTransacao);
 	}
 
-	public void deposito(float valor) throws ValorNegativoException {
+	public void deposito(ContaCorrente conta,float valor) throws ValorNegativoException, ConexaoException {
+		ContaCorrenteController cc = new ContaCorrenteController();
 
-		if (valor < 0 ) {
+		if (valor <= 0 ) {
 			throw new ValorNegativoException("Valor não pode ser negativo");
 		}
-		setSaldo(valor);
+		conta.setSaldo(conta.getSaldo() + valor);
+		cc.alterar(conta);
+
 		//Transacao novaTransacao = new Transacao(new Date(), valor, "Deposito");
 		//this.movimentacao(novaTransacao);
 	}

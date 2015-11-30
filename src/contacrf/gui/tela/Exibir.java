@@ -69,6 +69,9 @@ public class Exibir implements EventHandler<ActionEvent> {
 			hb7.getChildren().addAll(new Label("Estado"), bot.getCbest(), new Label("CEP"), bot.getTf8(),
 					new Label("Num"), bot.getTf5());
 			HBox hb8 = new HBox(10);
+			
+					
+			
 			String numContaFormatado = MascaraDeFormatacao.formatar("#####-#", cc.getNumeroConta(pf.getCpf()));
 			hb8.getChildren().addAll(new Label("Numero "+ numContaFormatado),new Label("Agencia " + agencia.getNumero()));
 			cena.add(hb1, 0, 0);
@@ -83,16 +86,35 @@ public class Exibir implements EventHandler<ActionEvent> {
 			cena.add(separadorHorizontal1, 0, 8);
 
 			bot.getTf1().setText(pf.getNome()); // NOME
-			bot.getTf2().setText(pf.getDataNasc()); // DATA NASCIMENTO
-			bot.getTf3().setText(pf.getCpf()); // CPF
+			
+			
+			//formata a data de nascimento para xx/xx/xxxx
+			String dtNascFormatado = MascaraDeFormatacao.formatar("##/##/####", pf.getDataNasc());
+			bot.getTf2().setText(dtNascFormatado); // DATA NASCIMENTO
+			
+			//formata cpf para xxx.xxx.xxx-xx
+			String CpfFormatado = MascaraDeFormatacao.formatar("###.###.###-##", pf.getCpf());			
+			bot.getTf3().setText(CpfFormatado); // CPF
+			
 			bot.getTf4().setText(end.getRua()); // RUA
 			bot.getTf5().setText(Integer.toString(end.getNumero())); // NUM
 			bot.getTf6().setText(end.getComplemento()); // COMPLEMENTO
 			bot.getTf7().setText(end.getBairro()); // BAIRRO
-			bot.getTf8().setText(end.getCEP()); // CEP
-			bot.getTf9().setText(pf.getTelefone()); // TELEFONE
+			
+			//formata o cep para xxxxx-xxx
+			String cepFormatado = MascaraDeFormatacao.formatar("#####-###", end.getCEP());			
+			bot.getTf8().setText(cepFormatado); // CEP
+			
+			//formata o telefone para (xx) x xxxx-xxxx
+			String telefoneFormatado = MascaraDeFormatacao.formatar("(##) # ####-####", pf.getTelefone());
+			bot.getTf9().setText(telefoneFormatado); // TELEFONE
+			
+			
 			bot.getTf10().setText(end.getCidade()); // CIDADE
+			
+			
 			bot.getTf11().setText(pf.getRg()); // RG
+			
 			bot.setCbsexo(pf.getSexo());
 			bot.setCbest(end.getEstado()); // ESTADO
 

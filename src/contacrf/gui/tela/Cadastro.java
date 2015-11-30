@@ -11,7 +11,11 @@ import contacrf.model.Agencia;
 import contacrf.model.Conta;
 import contacrf.model.Endereco;
 import contacrf.model.PessoaFisica;
+import contacrf.util.CepValidador;
+import contacrf.util.CpfValidador;
+import contacrf.util.DataValidador;
 import contacrf.util.MascaraDeFormatacao;
+import contacrf.util.TelefoneValidador;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -61,10 +65,12 @@ public class Cadastro implements EventHandler<ActionEvent>{
 		HBox hb7 = new HBox(10);
 		hb7.getChildren().addAll(new Label("Estado"),bot.getCbest(),new Label("CEP"),bot.getTf8(),new Label("Num"),bot.getTf5());
 		HBox hb8 = new HBox(10);
+		
 		Random random = new Random();		// GERAR NUMERO DA CONTA
 		conta.setNumero(String.valueOf(random.nextInt(880000)+10000));
 		String numContaFormatado = MascaraDeFormatacao.formatar("#####-#", conta.getNumero());
 		hb8.getChildren().addAll(new Label("Password"),bot.getPassword(),new Label("Numero "+ numContaFormatado),new Label("Agencia "+agencia.getNumero()));
+		
 		cena.add(hb1, 0, 0);
 		cena.add(hb2, 0, 1);
 		cena.add(hb3, 0, 2);
@@ -82,84 +88,135 @@ public class Cadastro implements EventHandler<ActionEvent>{
 		ButtonType buttonTypeC = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
 		dialog.getDialogPane().getButtonTypes().addAll(buttonTypeOk,buttonTypeC);
 
-		Node loginButton = dialog.getDialogPane().lookupButton(buttonTypeOk);
-		loginButton.setDisable(true);
-		bot.getPassword().textProperty().addListener((observable, oldValue, newValue) -> {
-			loginButton.setDisable(newValue.trim().isEmpty());
-		});
-
-		Node loginButton1 = dialog.getDialogPane().lookupButton(buttonTypeOk);
-		loginButton1.setDisable(true);
-		bot.getTf3().textProperty().addListener((observable, oldValue, newValue) -> {
-			loginButton1.setDisable(newValue.trim().isEmpty());
-		});
+		
 
 		dialog.showAndWait().ifPresent(ok->{// EXIBE TELA E RECEBE VALORES DAS CAIXAS
 			if(buttonTypeOk == ok){
-				String scan;
-				String name="";
-				boolean b = false;
-				scan = bot.getTf1().getText(); 		// NOME
-				pf.setNome(scan);
-				scan = bot.getTf11().getText();		// RG
-				pf.setRg(scan);
-				scan = bot.getCbsexo().getValue();	// SEXO
-				pf.setSexo(scan);
-				scan = bot.getTf9().getText();		// TELEFONE
-				pf.setTelefone(scan);
-				scan = bot.getTf2().getText();		// DATA
-				pf.setDataNasc(scan);
+				
+				
+				String r = "";
 
-				Pattern pattern = Pattern.compile("[0-9]+{11}");
-		        Matcher matcher = pattern.matcher(bot.getTf3().getText());
-
-		        while( b = matcher.find() ){
-		            if( b )
-		                name += matcher.group();
-		        }
-		        if(name.length() != 11){
-		        	Erro erro = new Erro("CPF INVALIDO!");
-		        	erro.handle(null);
-		        	return;
-		        }
-
-				scan = bot.getTf4().getText();		// RUA
-				end.setRua(scan);
-				scan = bot.getTf5().getText();		// NUMERO
-				end.setNumero(Integer.parseInt(scan));
-				scan = bot.getCbest().getValue();	// ESTADO
-				end.setEstado(scan);
-				scan = bot.getTf6().getText();		// COMPLEMENTO
-				end.setComplemento(scan);
-				scan = bot.getTf7().getText();		// BAIRRO
-				end.setBairro(scan);
-				scan = bot.getTf8().getText();		// CEP
-				end.setCEP(scan);
-				scan = bot.getTf10().getText();		// CIDADE
-				end.setCidade(scan);
-				scan = bot.getPassword().getText(); // PASSWORD FALTA ADD
-
-				if(scan.length()!=6){
-					Erro erro = new Erro("Senha invalida");
+				
+				
+				
+				
+				
+						
+				if(bot.getTf1().getText().equals("") || bot.getTf2().getText().equals("") || bot.getTf3().getText().equals("")
+						|| bot.getTf4().getText().equals("") || bot.getTf5().getText().equals("") || bot.getTf7().getText().equals("") 
+						|| bot.getTf8().getText().equals("") || bot.getTf9().getText().equals("") || bot.getTf10().getText().equals("") 
+						|| bot.getTf11().getText().equals("") || bot.getCbest().getValue() == null){
+					
+					Erro erro = new Erro("Todos os Campos são obrigatórios exceto o campo complemento");
 					erro.handle(null);
 					return;
-				}
-				conta.setSenha(bot.getPassword().getText());
-				conta.setCpfCliente(pf.getCpf());
-				pf.setEndereco(end);
-
-				try {
-					if(!pfc.existeCPF(pf.getCpf())){ // se o cpf não existe ele cadastra no banco
-						pfc.gravar(pf);
-						cc.AbrirConta(conta.getNumero(), conta.getCpfCliente(),conta.getSenha());
-						// FALTA TRANSAÇOES
-						InfoOk info = new InfoOk();
-						info.handle(null);
-					}else{
-						Erro erro = new Erro("CPF JA EXISTE");
+				}else{
+				
+				
+					String scan;					
+					
+					scan = bot.getTf1().getText(); 		// NOME
+					pf.setNome(scan);
+					
+					
+					scan = bot.getTf11().getText();		// RG
+					pf.setRg(scan);
+					
+					
+					scan = bot.getCbsexo().getValue();	// SEXO
+					pf.setSexo(scan);
+					
+					
+					
+					//valida o telefone	
+					if(!TelefoneValidador.isTelefone(scan = bot.getTf9().getText())){
+					    Erro erro = new Erro("Telefone Inválido");
 						erro.handle(null);
+						return;
+					}	
+					
+					//retira os parenteses e -				      
+				    scan = scan.replaceAll("[\\D]", "");
+					pf.setTelefone(scan);
+					
+					
+					//valida a data	
+					if(!DataValidador.isData(scan = bot.getTf2().getText())){
+					    Erro erro = new Erro("Cpf Inválido");
+						erro.handle(null);
+						return;
 					}
-				} catch (Exception e) {
+					
+					//retira as barras				      
+				    scan = scan.replaceAll("[\\D]", "");					
+					pf.setDataNasc(scan);
+	
+					
+					//valida o cpf	
+					if(!CpfValidador.validaCpf(scan = bot.getTf3().getText())){
+					    Erro erro = new Erro("Cpf Inválido");
+						erro.handle(null);
+						return;
+					}
+					
+					//retira os ponto e espaços 
+				    scan = bot.getTf3().getText();  
+				    scan = scan.replaceAll("[\\D]", "");
+				    pf.setCpf(scan);
+				    
+				    
+					scan = bot.getTf4().getText();		// RUA
+					end.setRua(scan);
+					scan = bot.getTf5().getText();		// NUMERO
+					end.setNumero(Integer.parseInt(scan));
+					scan = bot.getCbest().getValue();	// ESTADO
+					end.setEstado(scan);
+					scan = bot.getTf6().getText();		// COMPLEMENTO
+					end.setComplemento(scan);
+					scan = bot.getTf7().getText();		// BAIRRO
+					end.setBairro(scan);
+					
+					
+					
+					
+					//valida o cep	
+					if(!CepValidador.isCep(scan = bot.getTf8().getText())){
+					    Erro erro = new Erro("Cep Inválido");
+						erro.handle(null);
+						return;
+					}	
+					
+					//retira os parenteses e -				      
+					scan = scan.replaceAll("[\\D]", "");					
+					end.setCEP(scan);
+					
+					
+					scan = bot.getTf10().getText();		// CIDADE
+					end.setCidade(scan);
+					scan = bot.getPassword().getText(); // PASSWORD
+	
+					if(scan.length()!=6){
+						Erro erro = new Erro("Senha invalida");
+						erro.handle(null);
+						return;
+					}
+					conta.setSenha(bot.getPassword().getText());
+					conta.setCpfCliente(pf.getCpf());
+					pf.setEndereco(end);
+	
+					try {
+						if(!pfc.existeCPF(pf.getCpf())){ // se o cpf não existe ele cadastra no banco
+							pfc.gravar(pf);
+							cc.AbrirConta(conta.getNumero(), conta.getCpfCliente(),conta.getSenha());
+							// FALTA TRANSAÇOES
+							InfoOk info = new InfoOk();
+							info.handle(null);
+						}else{
+							Erro erro = new Erro("CPF JA EXISTE");
+							erro.handle(null);
+						}
+					} catch (Exception e) {
+					}
 				}
 			}
 		});
