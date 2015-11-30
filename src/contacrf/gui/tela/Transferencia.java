@@ -60,7 +60,7 @@ public class Transferencia implements EventHandler<ActionEvent> {
 		hbV.getChildren().addAll(new Label("Valor"),txtV);
 		VBox vb = new VBox(10);
 		vb.getChildren().addAll(hb, new Label("Agencia   6585-X"), separador, hb2, new Label("Agencia   6585-X"),
-				separador1, hbS,hbV);
+				separador1,hbV,hbS);
 		dialog.getDialogPane().setContent(vb);
 
 		ButtonType buttonTypeT = new ButtonType("Transferir", ButtonData.OK_DONE);
@@ -133,7 +133,7 @@ public class Transferencia implements EventHandler<ActionEvent> {
 					ButtonType buttonTypeC = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
 					alert.getDialogPane().getButtonTypes().add(buttonTypeC);
 					Optional<ButtonType> result = alert.showAndWait();
-					if (result.get() == ButtonType.OK) {
+					if (result.get() != buttonTypeC) {
 						if( contaO.getSaldo() >= valor){ // REALIZAR OPERAÇAO
 							try {
 								contaO.tranferencia(contaO,contaD, valor);
@@ -147,10 +147,10 @@ public class Transferencia implements EventHandler<ActionEvent> {
 							Erro erro = new Erro("Saldo insuficiente!");
 							erro.handle(null);
 						}
-					}else{
-						Erro erro = new Erro("Senha invalida");
-						erro.handle(null);
 					}
+				}else{
+					Erro erro = new Erro("Senha invalida");
+					erro.handle(null);
 				}
 			}
 		});

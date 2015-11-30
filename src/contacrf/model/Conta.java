@@ -82,13 +82,15 @@ public class Conta {
 	}
 
 
-	public void sacar(float valor) throws SaldoInsuficienteException, ValorNegativoException {
+	public void sacar(ContaCorrente conta,float valor) throws SaldoInsuficienteException, ValorNegativoException, ConexaoException {
+		ContaCorrenteController cc = new ContaCorrenteController();
 		if (valor < 0 ) {
 			throw new ValorNegativoException("Valor não pode ser negativo");
 		} else if (this.getSaldo() - valor < 0) {
 			throw new SaldoInsuficienteException("Saldo Insuficiente");
 		}
-		setSaldo(-valor);
+		conta.setSaldo(conta.getSaldo()-valor);
+		cc.alterar(conta);
 		//Transacao novaTransacao = new Transacao(new Date(), valor, "SAQUE");
 		//this.movimentacao(novaTransacao);
 
