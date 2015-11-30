@@ -72,7 +72,7 @@ public class Editar implements EventHandler<ActionEvent>{
 			cena.add(hb7, 0, 7);
 			cena.add(separadorHorizontal1, 0, 8);
 			try {
-				pf = pfd.getByCpf(busca.getNome());
+				pf = pfd.getByCpf(busca.getCPF());
 				end = endd.getByEndereco(pf.getId_end());
 			} catch (ConexaoException e) {
 				Erro erro = new Erro("Cliente não existe no sistema!!");

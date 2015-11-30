@@ -31,7 +31,7 @@ public class Relatorio implements EventHandler<ActionEvent>{
 		busca.handle(null);
 		if (busca.isAcho()) {
 			try {
-				pf = pfd.getByCpf(busca.getNome()); // VAI CONTER CPF
+				pf = pfd.getByCpf(busca.getCPF()); // VAI CONTER CPF
 				pf.setEndereco(endd.getByEndereco(pf.getId_end()));
 				per.createCsvFile(pf);
 				// per.createCsvFile(); TEM Q ALTERAR PARA RECEBER OS DADOS

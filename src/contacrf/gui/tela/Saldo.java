@@ -47,8 +47,8 @@ public class Saldo implements EventHandler<ActionEvent>{
 			txt1.setPromptText("XXX.XXX-X");
 
 			try {
-				pf = pfc.exibir(busca.getNome());
-				conta = cc.exibir(cc.getNumeroConta(busca.getNome()));
+				pf = pfc.exibir(busca.getCPF());
+				conta = cc.exibir(cc.getNumeroConta(busca.getCPF()));
 			} catch (ConexaoException e) {
 			}
 			HBox hb = new HBox(10);

@@ -69,7 +69,7 @@ public class Especial implements EventHandler<ActionEvent>{
 			graficoLinha.setPrefSize(600, 320);
 
 			try {
-				pf = pfc.exibir(busca.getNome());
+				pf = pfc.exibir(busca.getCPF());
 				conta = cc.exibir(cc.getNumeroConta(pf.getCpf()));
 			} catch (ConexaoException e) {
 				Erro erro = new Erro("Cliente não existe no sistema!!");

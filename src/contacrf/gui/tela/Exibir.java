@@ -1,18 +1,15 @@
 package contacrf.gui.tela;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import contacrf.DAO.EnderecoDAO;
 import contacrf.DAO.PessoaFisicaDAO;
 import contacrf.controller.ContaCorrenteController;
 import contacrf.exception.ConexaoException;
 import contacrf.gui.Botoes;
+import contacrf.gui.tela.Editar;
 import contacrf.model.Agencia;
-import contacrf.model.Conta;
-import contacrf.model.ContaCorrente;
 import contacrf.model.Endereco;
 import contacrf.model.PessoaFisica;
+import contacrf.util.MascaraDeFormatacao;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -37,7 +34,14 @@ public class Exibir implements EventHandler<ActionEvent> {
 			Agencia agencia = new Agencia();
 			PessoaFisicaDAO pfd = new PessoaFisicaDAO();
 			ContaCorrenteController cc = new ContaCorrenteController();
-			Conta conta = new Conta(); // FALTA
+
+			try {
+				pf = pfd.getByCpf(busca.getCPF()); // CONTEM CPF
+				end = endd.getByEndereco(pf.getId_end());
+			} catch (ConexaoException e) {
+				Erro erro = new Erro("Cliente não existe no sistema!!");
+				erro.handle(null);
+			}
 			Botoes bot = new Botoes();
 			Dialog<ButtonType> dialog = new Dialog<ButtonType>();
 			GridPane cena = new GridPane();
@@ -65,18 +69,8 @@ public class Exibir implements EventHandler<ActionEvent> {
 			hb7.getChildren().addAll(new Label("Estado"), bot.getCbest(), new Label("CEP"), bot.getTf8(),
 					new Label("Num"), bot.getTf5());
 			HBox hb8 = new HBox(10);
-			List<ContaCorrente> listConta = new ArrayList<ContaCorrente>();
-			try {
-				listConta.addAll(cc.listarContas());
-			} catch (ConexaoException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			for (ContaCorrente contaCorrente : listConta) {
-				if(contaCorrente.getCpfCliente() == busca.getNome())
-					conta = contaCorrente;
-			}
-			hb8.getChildren().addAll(new Label("Numero "+ conta.getNumero()),new Label("Agencia " + agencia.getNumero()));
+			String numContaFormatado = MascaraDeFormatacao.formatar("#####-#", cc.getNumeroConta(pf.getCpf()));
+			hb8.getChildren().addAll(new Label("Numero "+ numContaFormatado),new Label("Agencia " + agencia.getNumero()));
 			cena.add(hb1, 0, 0);
 			cena.add(hb2, 0, 1);
 			cena.add(hb3, 0, 2);
@@ -87,13 +81,7 @@ public class Exibir implements EventHandler<ActionEvent> {
 			cena.add(hb7, 0, 7);
 			cena.add(hb8, 0, 9);
 			cena.add(separadorHorizontal1, 0, 8);
-			try {
-				pf = pfd.getByCpf(busca.getNome()); // CONTEM CPF
-				end = endd.getByEndereco(pf.getId_end());
-			} catch (ConexaoException e) {
-				Erro erro = new Erro("Cliente não existe no sistema!!");
-				erro.handle(null);
-			}
+
 			bot.getTf1().setText(pf.getNome()); // NOME
 			bot.getTf2().setText(pf.getDataNasc()); // DATA NASCIMENTO
 			bot.getTf3().setText(pf.getCpf()); // CPF
@@ -109,9 +97,14 @@ public class Exibir implements EventHandler<ActionEvent> {
 			bot.setCbest(end.getEstado()); // ESTADO
 
 			dialog.getDialogPane().setContent(cena);
+			ButtonType buttonE = new ButtonType("Editar", ButtonData.OK_DONE);
 			ButtonType buttonOK = new ButtonType("OK", ButtonData.OK_DONE);
-			dialog.getDialogPane().getButtonTypes().add(buttonOK);
-			dialog.showAndWait();
+			dialog.getDialogPane().getButtonTypes().addAll(buttonE,buttonOK);
+			dialog.showAndWait().ifPresent(ok->{
+				Editar editar = new Editar();
+				if(ok == buttonE)
+					editar.handle(null);
+			});
 		}
 	}
 }

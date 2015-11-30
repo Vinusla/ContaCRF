@@ -1,16 +1,13 @@
 package contacrf.gui.tela;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import contacrf.DAO.ContaCorrenteDAO;
-import contacrf.controller.PessoaFisicaController;
+import contacrf.DAO.PessoaFisicaDAO;
+import contacrf.controller.ContaCorrenteController;
 import contacrf.exception.ConexaoException;
 import contacrf.model.Agencia;
-import contacrf.model.Conta;
-import contacrf.model.ContaCorrente;
 import contacrf.model.PessoaFisica;
+import contacrf.util.MascaraDeFormatacao;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -32,7 +29,8 @@ public class Fechar implements EventHandler<ActionEvent> {
 		busca.handle(null);
 		if (busca.isAcho()) {
 			PessoaFisica pf = new PessoaFisica();
-			PessoaFisicaController pfc = new PessoaFisicaController();
+			PessoaFisicaDAO pfd = new PessoaFisicaDAO();
+			Agencia agencia = new Agencia();
 			Alert dialogoAviso = new Alert(Alert.AlertType.WARNING);
 			GridPane cena = new GridPane();
 			cena.setPadding(new Insets(20, 35, 20, 35));
@@ -41,17 +39,12 @@ public class Fechar implements EventHandler<ActionEvent> {
 			dialogoAviso.setHeaderText("Você tem certeza que deseja excluir todos os seus dados ?");
 			Separator separator = new Separator();
 
-			List<Conta> contaList = new ArrayList<Conta>();
-			Conta aux = new ContaCorrente();
-			Agencia agencia = new Agencia();
-			for(int x = 0; x < contaList.size(); x++){
-			    if(contaList.get(x).getCpfCliente() == busca.getNome()){
-			       aux = contaList.get(x);
-			    }
-			}
+			ContaCorrenteController cc = new ContaCorrenteController();
 			try {
-				pf = pfc.exibir(busca.getNome());
+				pf = pfd.getByCpf(busca.getCPF()); // CONTEM CPF
 			} catch (ConexaoException e) {
+				Erro erro = new Erro("Cliente não existe no sistema!!");
+				erro.handle(null);
 			}
 
 			VBox vb = new VBox(10);
@@ -59,7 +52,8 @@ public class Fechar implements EventHandler<ActionEvent> {
 			HBox hb1 = new HBox(10);
 			hb1.getChildren().addAll(new Label(pf.getNome()),new Label("CPF "+pf.getCpf()));
 			HBox hb2 = new HBox(10);
-			hb2.getChildren().addAll(new Label("Numero " +aux.getNumero()),new Label("Agencia " +agencia.getNumero()));
+			String numContaFormatado = MascaraDeFormatacao.formatar("#####-#", cc.getNumeroConta(pf.getCpf()));
+			hb2.getChildren().addAll(new Label("Numero " + numContaFormatado),new Label("Agencia " +agencia.getNumero()));
 			cena.add(vb, 0, 0);
 			cena.add(hb1, 0, 1);
 			cena.add(hb2, 0, 2);
@@ -75,16 +69,14 @@ public class Fechar implements EventHandler<ActionEvent> {
 				dialogoAviso2.setTitle("Zathura Enterprise ™");
 
 				// Excluindo
-				ContaCorrenteDAO conta = new ContaCorrenteDAO();
 				try {
-					conta.bloquear(pf.getCpf());
-					dialogoAviso2.setHeaderText("EXCLUIDO COM SUCESSO!");
+					cc.bloquearConta(cc.getNumeroConta(pf.getCpf()));
+					dialogoAviso2.setHeaderText("BLOQUEADO COM SUCESSO!");
 					dialogoAviso2.setContentText("");
 				} catch (ConexaoException e1) {
-					dialogoAviso2.setHeaderText("Nao foi possivel!");
+					dialogoAviso2.setHeaderText("Não foi possivel bloquear conta!");
 					dialogoAviso2.setContentText("");
 				}
-
 				dialogoAviso2.getButtonTypes().setAll(btOk);
 				dialogoAviso2.show();
 			}
