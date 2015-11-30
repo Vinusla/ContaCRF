@@ -1,15 +1,24 @@
 package contacrf.gui.tela;
 
+import java.text.DecimalFormat;
+import java.util.Optional;
+
+import contacrf.controller.ContaCorrenteController;
+import contacrf.controller.PessoaFisicaController;
+import contacrf.exception.ConexaoException;
+import contacrf.model.Agencia;
+import contacrf.model.Conta;
+import contacrf.model.PessoaFisica;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -18,33 +27,42 @@ public class Saldo implements EventHandler<ActionEvent>{
 
 	public void handle(ActionEvent event) {
 		Buscar busca = new Buscar();
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		GridPane cena = new GridPane();
-		alert.setTitle("Zathura Enterprise ™");
-		alert.setHeaderText("Verifique os dados");
-		cena.setPadding(new Insets(20,35,20,35));
+		busca.handle(null);
+		if (busca.isAcho()) {
+			PessoaFisicaController pfc = new PessoaFisicaController();
+			ContaCorrenteController cc = new ContaCorrenteController();
+			Conta conta = new Conta();
+			PessoaFisica pf = new PessoaFisica();
+			Agencia agencia = new Agencia();
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			GridPane cena = new GridPane();
+			alert.setTitle("Zathura Enterprise ™");
+			alert.setHeaderText("Verifique os dados");
+			cena.setPadding(new Insets(20, 35, 20, 35));
+			Dialog<ButtonType> dialog = new Dialog<>();
+			TextField txt1 = new TextField();
+			dialog.setTitle("Zathura Enterprise ™");
+			dialog.setHeaderText("Informe os dados");
+			txt1.setPrefWidth(80);
+			txt1.setPromptText("XXX.XXX-X");
 
-		Dialog<ButtonType> dialog = new Dialog<>();
-		TextField txt1= new TextField();
-		dialog.setTitle("Zathura Enterprise ™");
-		dialog.setHeaderText("Informe os dados");
-		txt1.setPrefWidth(80);
-		txt1.setPromptText("XXX.XXX-X");
-		HBox hb = new HBox(10);
-		hb.getChildren().addAll(new Label("Numero"),txt1);
-		HBox hb1 = new HBox(10);
-		hb1.getChildren().addAll(new Label("Agencia   6585-X"));
-		VBox vb = new VBox(10);
-		vb.getChildren().addAll(hb,hb1);
-		dialog.getDialogPane().setContent(vb);
-
-		ButtonType buttonTypeB = new ButtonType("Buscar", ButtonData.OK_DONE);
-		ButtonType buttonTypeV = new ButtonType("Voltar", ButtonData.CANCEL_CLOSE);
-		dialog.getDialogPane().getButtonTypes().addAll(buttonTypeB,buttonTypeV);
-		dialog.showAndWait().ifPresent(ok->{
-			if(ok == buttonTypeB){
-
+			try {
+				pf = pfc.exibir(busca.getNome());
+				conta = cc.exibir(cc.getNumeroConta(busca.getNome()));
+			} catch (ConexaoException e) {
 			}
-		});
+			HBox hb = new HBox(10);
+			hb.getChildren().addAll(new Label("Numero " + conta.getNumero()),new Label("Agencia "+ agencia.getNumero()));
+
+			VBox vb = new VBox(10);
+			DecimalFormat df = new DecimalFormat("0.00");	// FORMATA SAIDA DE SALDO FLOAT
+			String saldo = df.format(conta.getSaldo());
+			vb.getChildren().addAll(hb,new Label(pf.getNome()),new Label("Saldo " + saldo));
+			dialog.getDialogPane().setContent(vb);
+
+			ButtonType buttonTypeV = new ButtonType("Voltar", ButtonData.CANCEL_CLOSE);
+			dialog.getDialogPane().getButtonTypes().addAll(buttonTypeV);
+			dialog.showAndWait();
+		}
 	}
 }
