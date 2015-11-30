@@ -6,7 +6,7 @@ import contacrf.gui.tela.Editar;
 import contacrf.gui.tela.Especial;
 import contacrf.gui.tela.Exibir;
 import contacrf.gui.tela.Fechar;
-import contacrf.gui.tela.InfoOk;
+import contacrf.gui.tela.Listar;
 import contacrf.gui.tela.Relatorio;
 import contacrf.gui.tela.Saldo;
 import contacrf.gui.tela.Saque;
@@ -39,9 +39,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-/**
- * Example of displaying a splash page for a standalone JavaFX application
- */
+
 public class Main extends Application {
 	private Imagem img = new Imagem();
 	public static final String APPLICATION_ICON = "logo.png";
@@ -130,11 +128,12 @@ public class Main extends Application {
 		MenuItem subAbrir = new MenuItem("Abrir conta"); // SUBMENU
 		MenuItem subEditar = new MenuItem("Editar conta"); // SUBMENU
 		MenuItem subExibir = new MenuItem("Exibir contas");
+		MenuItem subListar = new MenuItem("Listar contas");
 		MenuItem subFechar = new MenuItem("Fechar conta");
 		MenuItem subExit = new MenuItem("Exit");
 		subExit.setOnAction(actionEvent -> Platform.exit());
-		menuInicio.getItems().addAll(subAbrir, subEditar, subExibir, subFechar,
-				new SeparatorMenuItem(), subExit); // ADD SUBMENU
+		menuInicio.getItems().addAll(subAbrir, subEditar, subExibir,subListar,
+				subFechar,new SeparatorMenuItem(), subExit); // ADD SUBMENU
 
 		Menu menuOperacoes = new Menu("_Operações"); // MENU
 		MenuItem subRelatorio = new MenuItem("Gerar Relatório");
@@ -145,16 +144,11 @@ public class Main extends Application {
 		menuOperacoes.getItems().addAll(subSaque,subDeposito, subSaldo, subTransferencia,
 				subRelatorio);
 
-		Menu menuAjuda = new Menu("_Ajuda");
-		MenuItem subSobre = new MenuItem("Quem somos");
-		menuAjuda.getItems().addAll(subSobre);
-
 		Menu menuEspecial = new Menu("_Especial");
 		MenuItem subEspecial = new MenuItem("Especial");
 		menuEspecial.getItems().addAll(subEspecial);
 
-		menuBar.getMenus().addAll(menuInicio, menuOperacoes, menuEspecial,
-				menuAjuda);
+		menuBar.getMenus().addAll(menuInicio, menuOperacoes, menuEspecial);
 		stage.setScene(scene);
 		stage.show();
 
@@ -162,6 +156,7 @@ public class Main extends Application {
 		subAbrir.setOnAction(new Cadastro());
 		subEditar.setOnAction(new Editar());
 		subExibir.setOnAction(new Exibir());
+		subListar.setOnAction(new Listar());
 		subFechar.setOnAction(new Fechar());
 
 		subSaque.setOnAction(new Saque());
@@ -171,7 +166,6 @@ public class Main extends Application {
 		subRelatorio.setOnAction(new Relatorio());
 
 		subEspecial.setOnAction(new Especial());
-		subSobre.setOnAction(new InfoOk());
     }
 
     private void showSplash(
