@@ -9,7 +9,9 @@ import java.util.List;
 
 import contacrf.conexao.ConnectionFactory;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.CpfJaCadastradaException;
 import contacrf.exception.EnderecoNullPointerException;
+import contacrf.exception.PessoaFisicaNullPointerException;
 import contacrf.gui.tela.Erro;
 import contacrf.model.PessoaFisica;
 
@@ -62,9 +64,7 @@ public class PessoaFisicaDAO {
 				stmt.close();
 			}
 		} catch (SQLException e) {
-			String msg = "Conta já existe no sistema!";
-			Erro erro = new Erro(msg);
-			erro.handle(null);
+			throw new ConexaoException("Não foi possível preparar o banco inserir os dados na Tabela pessoa fisica");
 		} catch (NullPointerException e) {
 			throw new EnderecoNullPointerException("Objeto do tipo Endereço não pode ser criado");
 
@@ -110,7 +110,7 @@ public class PessoaFisicaDAO {
 			}
 		} catch (SQLException e) {
 			throw new ConexaoException(
-					"Não foi possível preparar o banco para a a busca de dados pelo cpf na tabela pessoafisica");
+					"Não foi possível preparar o banco para a a busca de dados pelo cpf na Tabela pessoafisica");
 		} finally {
 
 			try {
@@ -131,7 +131,8 @@ public class PessoaFisicaDAO {
 	}
 
 	// Retorna um objeto PessoaFisca atraves do CPF
-	public PessoaFisica getByCpf(String cpf) throws ConexaoException {
+	public PessoaFisica getByCpf(String cpf) throws ConexaoException, PessoaFisicaNullPointerException, EnderecoNullPointerException {
+		
 		// Abrindo a conexão com o banco
 		try {
 			this.conexao = ConnectionFactory.getInstance().getConnection();
@@ -160,7 +161,7 @@ public class PessoaFisicaDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new ConexaoException("Não foi possível preparar o banco para a a busca de dados pelo cpf na tabela pessoafisica");
+			throw new ConexaoException("Não foi possível preparar o banco para a a busca de dados pelo cpf na Tabela pessoafisica");
 		} finally {
 			try {
 				stmt.close();
@@ -181,8 +182,15 @@ public class PessoaFisicaDAO {
 		try {
 			pf.setEndereco(this.endDAO.getByEndereco(pf.getId_end()));
 		} catch (ConexaoException e) {
-			throw new ConexaoException("Não foi possível procurar o endereco");
+			throw new ConexaoException(e.getMessage());
+		}catch (EnderecoNullPointerException e) {
+			throw new EnderecoNullPointerException(e.getMessage());
 		}
+		
+		
+		if(pf.equals(null))
+			throw new PessoaFisicaNullPointerException("Cliente não encontrado!");
+		
 		return pf;
 	}
 
@@ -231,7 +239,7 @@ public class PessoaFisicaDAO {
 	}
 
 	// verifica se o cpf já existe no banco de dados
-	public boolean verificaCpf(String cpf) throws ConexaoException {
+	public boolean verificaCpf(String cpf) throws ConexaoException, CpfJaCadastradaException {
 
 		// Abrindo a conexão com o banco
 		try {
@@ -254,11 +262,11 @@ public class PessoaFisicaDAO {
 				if (cpf.equals(rs.getString("cpf")))
 					existe = true;
 			}
+			
 			stmt.close();
 
 		} catch (SQLException e) {
-			throw new ConexaoException(
-					"Não foi possível preparar o banco para a a busca de dados pelo cpf na tabela pessoafisica");
+			throw new ConexaoException(	"Não foi possível preparar o banco para a a busca de dados pelo cpf na Tabela pessoafisica");
 		} finally {
 			try {
 				stmt.close();
@@ -274,6 +282,12 @@ public class PessoaFisicaDAO {
 				throw new ConexaoException("Não foi possível fechar a conexão com o banco");
 			}
 		}
+		
+		
+		if(existe == true)
+			throw new CpfJaCadastradaException("Cpf Já cadastrado");
+		
+		
 		return existe;
 	}
 }

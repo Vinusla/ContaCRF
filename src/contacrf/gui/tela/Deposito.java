@@ -5,6 +5,8 @@ import java.util.Optional;
 import contacrf.controller.ContaCorrenteController;
 import contacrf.controller.PessoaFisicaController;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.ContaJaCadastradaException;
+import contacrf.exception.ContaNãoCadastradaException;
 import contacrf.exception.ValorNegativoException;
 import contacrf.model.Agencia;
 import contacrf.model.ContaCorrente;
@@ -44,35 +46,39 @@ public class Deposito implements EventHandler<ActionEvent>{
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK){
-			ContaCorrenteController cc = new ContaCorrenteController();
-			ContaCorrente conta = new ContaCorrente();
-			String numero =txfN.getText();
-
-			try {
-				if (cc.existeConta(numero)) {
-
+			
+			if(txfN.getText().equals("") || txfV.getText().equals("")){
+				Erro erro = new Erro("Todos o campos devem ser preenchido!");
+				erro.handle(null);
+			}else{
+			
+				ContaCorrenteController cc = new ContaCorrenteController();
+				ContaCorrente conta = new ContaCorrente();
+				String numero =txfN.getText();
+				
+				
+				try {
+					cc.existeConta(numero);
 					float valor = Float.parseFloat(txfV.getText());
-					System.out.println(valor);
-
 					conta = cc.exibir(numero);
 					if (conta.getNumero().equals(numero) || valor > 0) {
 						conta.deposito(conta, valor);
 						InfoOk info = new InfoOk("Valor depositado ", valor);
 						info.handle(null);
-					} else if (valor <= 0) {
-						Erro erro = new Erro("Valor insuficiente!465");
-						erro.handle(null);
 					}
-					}else {
-						Erro erro = new Erro("Conta não encontrada465!");
-						erro.handle(null);
-					}
-			} catch (NumberFormatException | ConexaoException e) {
-				Erro erro = new Erro("Conta não encontrada!");
-				erro.handle(null);
-			} catch (ValorNegativoException e) {
-				Erro erro = new Erro("Valor insuficiente!");
-				erro.handle(null);
+				} catch (ConexaoException e) {
+					Erro erro = new Erro(e.getMessage());
+					erro.handle(null);
+				} catch (ContaNãoCadastradaException e) {
+					Erro erro = new Erro(e.getMessage());
+					erro.handle(null);
+				} catch (ContaJaCadastradaException e) {
+					Erro erro = new Erro(e.getMessage());
+					erro.handle(null);
+				}catch (ValorNegativoException e) {
+					Erro erro = new Erro(e.getMessage());
+					erro.handle(null);
+				}
 			}
 		}
 	}

@@ -6,6 +6,10 @@ import java.util.Optional;
 import contacrf.controller.ContaCorrenteController;
 import contacrf.controller.PessoaFisicaController;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.ContaJaCadastradaException;
+import contacrf.exception.ContaNãoCadastradaException;
+import contacrf.exception.EnderecoNullPointerException;
+import contacrf.exception.PessoaFisicaNullPointerException;
 import contacrf.model.Agencia;
 import contacrf.model.Conta;
 import contacrf.model.PessoaFisica;
@@ -47,9 +51,23 @@ public class Saldo implements EventHandler<ActionEvent>{
 			txt1.setPromptText("XXX.XXX-X");
 
 			try {
-				pf = pfc.exibir(busca.getCPF());
+				pf = pfc.exibir(busca.getCPF());				
 				conta = cc.exibir(cc.getNumeroConta(busca.getCPF()));
 			} catch (ConexaoException e) {
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);
+			} catch (PessoaFisicaNullPointerException e) {
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);
+			} catch (EnderecoNullPointerException e) {
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);
+			} catch (ContaNãoCadastradaException e) {
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);
+			} catch (ContaJaCadastradaException e) {
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);				
 			}
 			HBox hb = new HBox(10);
 			hb.getChildren().addAll(new Label("Numero " + conta.getNumero()),new Label("Agencia "+ agencia.getNumero()));

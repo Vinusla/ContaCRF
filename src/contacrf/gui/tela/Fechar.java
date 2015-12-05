@@ -5,6 +5,10 @@ import java.util.Optional;
 import contacrf.DAO.PessoaFisicaDAO;
 import contacrf.controller.ContaCorrenteController;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.ContaJaCadastradaException;
+import contacrf.exception.ContaNãoCadastradaException;
+import contacrf.exception.EnderecoNullPointerException;
+import contacrf.exception.PessoaFisicaNullPointerException;
 import contacrf.model.Agencia;
 import contacrf.model.PessoaFisica;
 import contacrf.util.MascaraDeFormatacao;
@@ -36,14 +40,21 @@ public class Fechar implements EventHandler<ActionEvent> {
 			cena.setPadding(new Insets(20, 35, 20, 35));
 			cena.setAlignment(Pos.TOP_CENTER);
 			dialogoAviso.setTitle("Zathura Enterprise ™");
-			dialogoAviso.setHeaderText("Você tem certeza que deseja excluir todos os seus dados ?");
+			dialogoAviso.setHeaderText("Você tem certeza que deseja bloquear a conta?");
 			Separator separator = new Separator();
 
 			ContaCorrenteController cc = new ContaCorrenteController();
+			
 			try {
 				pf = pfd.getByCpf(busca.getCPF()); // CONTEM CPF
 			} catch (ConexaoException e) {
-				Erro erro = new Erro("Cliente não existe no sistema!!");
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);
+			} catch (PessoaFisicaNullPointerException e) {
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);
+			} catch (EnderecoNullPointerException e) {
+				Erro erro = new Erro(e.getMessage());
 				erro.handle(null);
 			}
 
@@ -68,13 +79,19 @@ public class Fechar implements EventHandler<ActionEvent> {
 				Alert dialogoAviso2 = new Alert(Alert.AlertType.WARNING);
 				dialogoAviso2.setTitle("Zathura Enterprise ™");
 
-				// Excluindo
+ 
 				try {
 					cc.bloquearConta(cc.getNumeroConta(pf.getCpf()));
 					dialogoAviso2.setHeaderText("BLOQUEADO COM SUCESSO!");
 					dialogoAviso2.setContentText("");
-				} catch (ConexaoException e1) {
-					dialogoAviso2.setHeaderText("Não foi possivel bloquear conta!");
+				} catch (ConexaoException e) {
+					dialogoAviso2.setHeaderText(e.getMessage());
+					dialogoAviso2.setContentText("");
+				} catch (ContaNãoCadastradaException e) {
+					dialogoAviso2.setHeaderText(e.getMessage());
+					dialogoAviso2.setContentText("");
+				} catch (ContaJaCadastradaException e) {
+					dialogoAviso2.setHeaderText(e.getMessage());
 					dialogoAviso2.setContentText("");
 				}
 				dialogoAviso2.getButtonTypes().setAll(btOk);

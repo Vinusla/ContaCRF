@@ -8,6 +8,8 @@ import contacrf.DAO.EnderecoDAO;
 import contacrf.DAO.PessoaFisicaDAO;
 import contacrf.controller.PessoaFisicaController;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.EnderecoNullPointerException;
+import contacrf.exception.PessoaFisicaNullPointerException;
 import contacrf.gui.Botoes;
 import contacrf.model.Conta;
 import contacrf.model.Endereco;
@@ -76,13 +78,23 @@ public class Editar implements EventHandler<ActionEvent>{
 			cena.add(hb6, 0, 6);
 			cena.add(hb7, 0, 7);
 			cena.add(separadorHorizontal1, 0, 8);
+			
 			try {
 				pf = pfd.getByCpf(busca.getCPF());
 				end = endd.getByEndereco(pf.getId_end());
 			} catch (ConexaoException e) {
-				Erro erro = new Erro("Cliente não existe no sistema!!");
+				Erro erro = new Erro(e.getMessage());
 				erro.handle(null);
+			}catch (PessoaFisicaNullPointerException e) {
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);			
+			} catch (EnderecoNullPointerException e) {
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);	
 			}
+			
+			
+			
 			bot.getTf1().setText(pf.getNome());	//	NOME
 			
 			//formata a data de nascimento para xx/xx/xxxx
@@ -103,7 +115,7 @@ public class Editar implements EventHandler<ActionEvent>{
 			bot.getTf8().setText(cepFormatado); // CEP
 			
 			//formata o telefone para (xx) x xxxx-xxxx
-			String telefoneFormatado = MascaraDeFormatacao.formatar("(##) # ####-####", pf.getTelefone());
+			String telefoneFormatado = MascaraDeFormatacao.formatar("(##)#####-####", pf.getTelefone());
 			bot.getTf9().setText(telefoneFormatado); // TELEFONE
 			
 			
@@ -136,8 +148,14 @@ public class Editar implements EventHandler<ActionEvent>{
 					String scan;
 					scan = bot.getTf1().getText(); 		// NOME
 					pf.setNome(scan);
+					
+					
 					scan = bot.getTf11().getText();		// RG
+					//só pega os numeros
+					scan = scan.replaceAll("[\\D]", "");
 					pf.setRg(scan);
+					
+					
 					scan = bot.getCbsexo().getValue();	// SEXO
 					pf.setSexo(scan);
 					
@@ -206,10 +224,10 @@ public class Editar implements EventHandler<ActionEvent>{
 					end.setCidade(scan);
 	
 					pf.setEndereco(end);
+					
 					try {
 						pfc.alterar(pf);
 					} catch (ConexaoException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 	

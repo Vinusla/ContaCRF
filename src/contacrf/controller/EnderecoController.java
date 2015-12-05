@@ -2,6 +2,7 @@ package contacrf.controller;
 
 import contacrf.DAO.EnderecoDAO;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.EnderecoNullPointerException;
 import contacrf.model.Endereco;
 
 public class EnderecoController {
@@ -22,6 +23,8 @@ public class EnderecoController {
 		try {
 			end = this.endDAO.getByEndereco(id_end);
 		} catch (ConexaoException e) {
+			System.out.println(e);
+		} catch (EnderecoNullPointerException e) {
 			System.out.println(e);
 		}
 		return end;

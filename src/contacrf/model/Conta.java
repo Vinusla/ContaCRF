@@ -6,6 +6,8 @@ import java.util.List;
 
 import contacrf.controller.ContaCorrenteController;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.ContaJaCadastradaException;
+import contacrf.exception.ContaNãoCadastradaException;
 import contacrf.exception.SaldoInsuficienteException;
 import contacrf.exception.ValorNegativoException;
 
@@ -82,7 +84,7 @@ public class Conta {
 	}
 
 
-	public void sacar(ContaCorrente conta,float valor) throws SaldoInsuficienteException, ValorNegativoException, ConexaoException {
+	public void sacar(ContaCorrente conta,float valor) throws SaldoInsuficienteException, ValorNegativoException, ConexaoException, ContaNãoCadastradaException, ContaJaCadastradaException {
 		ContaCorrenteController cc = new ContaCorrenteController();
 		if (valor < 0 ) {
 			throw new ValorNegativoException("Valor não pode ser negativo");
@@ -96,7 +98,7 @@ public class Conta {
 
 	}
 
-	public void tranferencia(ContaCorrente contaOrigem,ContaCorrente contaDestino, float valor) throws SaldoInsuficienteException, ValorNegativoException, ConexaoException {
+	public void tranferencia(ContaCorrente contaOrigem,ContaCorrente contaDestino, float valor) throws SaldoInsuficienteException, ValorNegativoException, ConexaoException, ContaNãoCadastradaException, ContaJaCadastradaException {
 		ContaCorrenteController cc = new ContaCorrenteController();
 		if (valor < 0 ) {
 			throw new ValorNegativoException("Valor não pode ser negativo");
@@ -111,7 +113,7 @@ public class Conta {
 		//this.movimentacao(novaTransacao);
 	}
 
-	public void deposito(ContaCorrente conta,float valor) throws ValorNegativoException, ConexaoException {
+	public void deposito(ContaCorrente conta,float valor) throws ValorNegativoException, ConexaoException, ContaNãoCadastradaException, ContaJaCadastradaException {
 		ContaCorrenteController cc = new ContaCorrenteController();
 
 		if (valor <= 0 ) {

@@ -68,89 +68,101 @@ public class Transferencia implements EventHandler<ActionEvent> {
 		dialog.getDialogPane().getButtonTypes().addAll(buttonTypeT, buttonTypeV);
 		dialog.showAndWait().ifPresent(ok -> {
 			if (ok == buttonTypeT) {
-				PessoaFisicaController pfc = new PessoaFisicaController();
-				ContaCorrenteController cc = new ContaCorrenteController();
-				ContaCorrente contaO = new ContaCorrente();
-				ContaCorrente contaD = new ContaCorrente();
-				ContaCorrente contaAux = new ContaCorrente();
-				PessoaFisica pfO = new PessoaFisica();
-				PessoaFisica pfD = new PessoaFisica();
-				Agencia agencia = new Agencia();
-				float valor = Float.parseFloat(txtV.getText());
-				if(valor<0){
-					Erro erro = new Erro("Valor de transferencia invalido!");
+				
+				if(txt1.getText().equals("") || txt2.getText().equals("") || txtV.getText().equals("") || password.getText().equals("")){
+					Erro erro = new Erro("Todos os campos devem ser preenchidos!");
 					erro.handle(null);
 					return;
-				}
-				try {
-					contaAux = cc.exibir(txt1.getText());
-					if ('1' == contaAux.getAtivo()){
-						contaO = contaAux;
-						pfO = pfc.exibir(contaO.getCpfCliente());
-					}else{
-						Erro erro = new Erro("Conta origem bloqueada!");
+				}else{
+				
+				
+					PessoaFisicaController pfc = new PessoaFisicaController();
+					ContaCorrenteController cc = new ContaCorrenteController();
+					ContaCorrente contaO = new ContaCorrente();
+					ContaCorrente contaD = new ContaCorrente();
+					ContaCorrente contaAux = new ContaCorrente();
+					PessoaFisica pfO = new PessoaFisica();
+					PessoaFisica pfD = new PessoaFisica();
+					Agencia agencia = new Agencia();
+					float valor = Float.parseFloat(txtV.getText());
+					
+					if(valor<0){
+						Erro erro = new Erro("Valor de transferencia invalido!");
 						erro.handle(null);
 						return;
 					}
-					contaAux = cc.exibir(txt2.getText());
-					if ('1' == contaAux.getAtivo()){
-						contaD = cc.exibir(txt2.getText());
-						pfD = pfc.exibir(contaD.getCpfCliente());
-					}else{
-						Erro erro = new Erro("Conta destino bloqueada!");
+					
+					try {
+						contaAux = cc.exibir(txt1.getText());
+						if ('1' == contaAux.getAtivo()){
+							contaO = contaAux;
+							pfO = pfc.exibir(contaO.getCpfCliente());
+						}else{
+							Erro erro = new Erro("Conta origem bloqueada!");
+							erro.handle(null);
+							return;
+						}
+						contaAux = cc.exibir(txt2.getText());
+						if ('1' == contaAux.getAtivo()){
+							contaD = cc.exibir(txt2.getText());
+							pfD = pfc.exibir(contaD.getCpfCliente());
+						}else{
+							Erro erro = new Erro("Conta destino bloqueada!");
+							erro.handle(null);
+							return;
+						}
+					} catch (Exception e) {
+						Erro erro = new Erro("Conta nao existe!");
 						erro.handle(null);
 						return;
 					}
-				} catch (Exception e) {
-					Erro erro = new Erro("Conta nao existe!");
-					erro.handle(null);
-					return;
-				}
-				String scan;
-				scan = password.getText();
-
-				if (contaO.getSenha().equals(scan)) {
-					HBox hb3 = new HBox(10);
-					hb3.getChildren().addAll(new Label("Numero do titular "+contaO.getNumero()), new Label("Agencia " +agencia.getNumero()));
-					HBox hb4 = new HBox(10);
-					hb4.getChildren().addAll(new Label(pfO.getNome()));
-					HBox hb5 = new HBox(10);
-					hb5.getChildren().addAll(new Label("Numero de destinatorio "+contaD.getNumero()), new Label("Agencia " +agencia.getNumero()));
-					HBox hb6 = new HBox(40);
-					hb6.getChildren().addAll(new Label(pfD.getNome()));
-
-					HBox hbs = new HBox(40);
-					DecimalFormat df = new DecimalFormat("0.00");	// FORMATA SAIDA DE SALDO FLOAT
-					String saldo = df.format(contaO.getSaldo());
-					hbs.getChildren().addAll(new Label("Saldo " + saldo));
-					cena.add(hb3, 0, 0);
-					cena.add(hb4, 0, 1);
-					cena.add(separador, 0, 2);
-					cena.add(hb5, 0, 3);
-					cena.add(hb6, 0, 4);
-					cena.add(hbs, 1, 5);
-					alert.getDialogPane().setContent(cena);
-					ButtonType buttonTypeC = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
-					alert.getDialogPane().getButtonTypes().add(buttonTypeC);
-					Optional<ButtonType> result = alert.showAndWait();
-					if (result.get() != buttonTypeC) {
-						if( contaO.getSaldo() >= valor){ // REALIZAR OPERAÇAO
-							try {
-								contaO.tranferencia(contaO,contaD, valor);
-							} catch (Exception e) {
-								Erro erro = new Erro("Transação não realizada!");
+					String scan;
+					scan = password.getText();
+	
+					if (contaO.getSenha().equals(scan)) {
+						HBox hb3 = new HBox(10);
+						hb3.getChildren().addAll(new Label("Numero do titular "+contaO.getNumero()), new Label("Agencia " +agencia.getNumero()));
+						HBox hb4 = new HBox(10);
+						hb4.getChildren().addAll(new Label(pfO.getNome()));
+						HBox hb5 = new HBox(10);
+						hb5.getChildren().addAll(new Label("Numero de destinatorio "+contaD.getNumero()), new Label("Agencia " +agencia.getNumero()));
+						HBox hb6 = new HBox(40);
+						hb6.getChildren().addAll(new Label(pfD.getNome()));
+	
+						HBox hbs = new HBox(40);
+						DecimalFormat df = new DecimalFormat("0.00");	// FORMATA SAIDA DE SALDO FLOAT
+						String saldo = df.format(contaO.getSaldo());
+						hbs.getChildren().addAll(new Label("Saldo " + saldo));
+						cena.add(hb3, 0, 0);
+						cena.add(hb4, 0, 1);
+						cena.add(separador, 0, 2);
+						cena.add(hb5, 0, 3);
+						cena.add(hb6, 0, 4);
+						cena.add(hbs, 1, 5);
+						alert.getDialogPane().setContent(cena);
+						ButtonType buttonTypeC = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
+						alert.getDialogPane().getButtonTypes().add(buttonTypeC);
+						Optional<ButtonType> result = alert.showAndWait();
+						
+						if (result.get() != buttonTypeC) {
+							if( contaO.getSaldo() >= valor){ // REALIZAR OPERAÇAO
+								try {
+									contaO.tranferencia(contaO,contaD, valor);
+								} catch (Exception e) {
+									Erro erro = new Erro("Transação não realizada!");
+									erro.handle(null);
+								}
+								InfoOk info = new InfoOk();
+								info.handle(null);
+							} else {
+								Erro erro = new Erro("Saldo insuficiente!");
 								erro.handle(null);
 							}
-							InfoOk info = new InfoOk();
-							info.handle(null);
-						} else {
-							Erro erro = new Erro("Saldo insuficiente!");
-							erro.handle(null);
 						}
+					}else{
+						Erro erro = new Erro("Senha invalida");
+						erro.handle(null);
 					}
-				}else{
-					Erro erro = new Erro("Senha invalida");
-					erro.handle(null);
 				}
 			}
 		});

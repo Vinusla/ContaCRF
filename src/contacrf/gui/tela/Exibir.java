@@ -4,6 +4,8 @@ import contacrf.DAO.EnderecoDAO;
 import contacrf.DAO.PessoaFisicaDAO;
 import contacrf.controller.ContaCorrenteController;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.EnderecoNullPointerException;
+import contacrf.exception.PessoaFisicaNullPointerException;
 import contacrf.gui.Botoes;
 import contacrf.gui.tela.Editar;
 import contacrf.model.Agencia;
@@ -35,13 +37,23 @@ public class Exibir implements EventHandler<ActionEvent> {
 			PessoaFisicaDAO pfd = new PessoaFisicaDAO();
 			ContaCorrenteController cc = new ContaCorrenteController();
 
+			
 			try {
 				pf = pfd.getByCpf(busca.getCPF()); // CONTEM CPF
 				end = endd.getByEndereco(pf.getId_end());
 			} catch (ConexaoException e) {
-				Erro erro = new Erro("Cliente não existe no sistema!!");
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);
+			}catch (EnderecoNullPointerException e) {
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);
+			} catch (PessoaFisicaNullPointerException e) {
+				Erro erro = new Erro(e.getMessage());
 				erro.handle(null);
 			}
+			
+			
+			
 			Botoes bot = new Botoes();
 			Dialog<ButtonType> dialog = new Dialog<ButtonType>();
 			GridPane cena = new GridPane();
@@ -106,7 +118,7 @@ public class Exibir implements EventHandler<ActionEvent> {
 			bot.getTf8().setText(cepFormatado); // CEP
 			
 			//formata o telefone para (xx) x xxxx-xxxx
-			String telefoneFormatado = MascaraDeFormatacao.formatar("(##) # ####-####", pf.getTelefone());
+			String telefoneFormatado = MascaraDeFormatacao.formatar("(##)#####-####", pf.getTelefone());
 			bot.getTf9().setText(telefoneFormatado); // TELEFONE
 			
 			

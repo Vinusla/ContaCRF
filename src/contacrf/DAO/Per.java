@@ -18,9 +18,9 @@ public class Per {
 
 			// Criação de um buffer para a escrita em uma stream
 			BufferedWriter StrW = new BufferedWriter(new FileWriter(
-					"tabela.csv"));
+					"Tabela.csv"));
 
-			// Escrita dos dados da tabela
+			// Escrita dos dados da Tabela
 			StrW.write("Nome;CPF;Telefone;Cidade;Rua;Numero;Bairro;Estado\n");
 			StrW.write(pf.getNome()+ ";" +pf.getCpf()+ ";" +pf.getTelefone()+ ";" +pf.getEndereco().getCidade()+
 				";" +pf.getEndereco().getRua()+ ";" +pf.getEndereco().getNumero()+ ";" +pf.getEndereco().getBairro()+
@@ -43,7 +43,7 @@ public class Per {
 
 			// Criação de um buffer para a ler de uma stream
 			BufferedReader StrR = new BufferedReader(new FileReader(
-					"tabela.csv"));
+					"Tabela.csv"));
 
 			String Str;
 			String[] TableLine;

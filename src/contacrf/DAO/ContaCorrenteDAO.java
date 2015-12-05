@@ -9,13 +9,15 @@ import java.util.List;
 
 import contacrf.conexao.ConnectionFactory;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.ContaJaCadastradaException;
+import contacrf.exception.ContaNãoCadastradaException;
 import contacrf.model.ContaCorrente;
 
 public class ContaCorrenteDAO {
 
 	private Connection conexao = null;
 
-	public void abrir(String numeroConta, String cpfCiente, String senha) throws ConexaoException{
+	public void abrir(String numeroConta, String cpfCiente, String senha) throws ConexaoException, ContaNãoCadastradaException{
 		// Abrindo a conexão com o banco
 		try {
 			this.conexao = ConnectionFactory.getInstance().getConnection();
@@ -35,7 +37,7 @@ public class ContaCorrenteDAO {
 				stmt.setFloat(2, 0.0f);
 				stmt.setString(3, senha);
 				stmt.setString(4, cpfCiente);
-				stmt.setString(5, String.valueOf('0'));	//converte char em String
+				stmt.setString(5, String.valueOf('1'));	//converte char em String
 
 				// executando
 				stmt.execute();
@@ -43,20 +45,20 @@ public class ContaCorrenteDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new ConexaoException("Não foi possível preparar o banco para a inserção do registro na tabela conta");
+			throw new ContaNãoCadastradaException("Conta não poder criada");
 		} finally {
 			// Fechando a conexão com o banco
 			try {
 				if (conexao != null)
 					ConnectionFactory.getInstance().fecharConexao();
 			} catch (ConexaoException e) {
-				throw new ConexaoException(	"Não foi possível fechar a conexão com o banco");
+				throw new ConexaoException("Não foi possível fechar a conexão com o banco");
 			}
 		}
 	}
 
 	// Retorna um objeto ContaCorrente atraves do numero da conta
-	public ContaCorrente getByConta(String numConta) throws ConexaoException {
+	public ContaCorrente getByConta(String numConta) throws ConexaoException, ContaNãoCadastradaException {
 
 		// Abrindo a conexão com o banco
 		try {
@@ -84,7 +86,7 @@ public class ContaCorrenteDAO {
 				cc.setAtivo(rs.getString("ativo").charAt(0));//converte String para char
 			}
 		} catch (SQLException e) {
-			throw new ConexaoException(	"Não foi possível preparar o banco para a a busca de dados pelo numero da conta na tabela conta");
+			throw new ConexaoException(	"Não foi possível preparar o banco para a a busca de dados pelo numero da conta na Tabela conta");
 		} finally {
 
 			try {
@@ -100,12 +102,17 @@ public class ContaCorrenteDAO {
 				throw new ConexaoException(	"Não foi possível fechar a conexão com o banco");
 			}
 		}
+		
+		if(cc.equals(null))
+			throw new ContaNãoCadastradaException("Conta não cadastrada!");
+		
+		
 		return cc;
 	}
 
 	
 	// Retorna o numero da conta de acordo com o cpf passado por parâmetro
-		public String getByNumConta(String cpfCliente) throws ConexaoException {
+		public String getByNumConta(String cpfCliente) throws ConexaoException{
 
 			// Abrindo a conexão com o banco
 			try {
@@ -129,7 +136,7 @@ public class ContaCorrenteDAO {
 				}
 				
 				} catch (SQLException e) {
-					throw new ConexaoException(	"Não foi possível preparar o banco para a a busca de dados pelo numero do cpf na tabela conta");
+					throw new ConexaoException(	"Não foi possível preparar o banco para a a busca de dados pelo numero do cpf na Tabela conta");
 				} finally {
 		
 				try {
@@ -145,7 +152,9 @@ public class ContaCorrenteDAO {
 					throw new ConexaoException(	"Não foi possível fechar a conexão com o banco");
 				}
 			}
-				return numConta;
+		
+			
+			return numConta;
 		}
 	
 	//Altera is dadis da conta do cliente
@@ -246,7 +255,7 @@ public class ContaCorrenteDAO {
 	}
 
 	//Bloquea a conta do cliente inserinfo 0 com campo Ativo
-	public boolean bloquear(String numConta) throws ConexaoException{
+	public boolean bloquear(String numConta) throws ConexaoException, ContaNãoCadastradaException, ContaJaCadastradaException{
 
 		ContaCorrente cc = null;
 		boolean status = false;
@@ -255,13 +264,14 @@ public class ContaCorrenteDAO {
 			cc = getByConta(numConta);
 			cc.setAtivo('0');
 			update(cc);
-		}else
-			throw new ConexaoException("Conta não encontrado");
+		}
+		
 		return status;
 	}
-
+	
+	
 	//Veirifica se a conta existe
-	public boolean verificaConta(String numConta) throws ConexaoException{
+	public boolean verificaConta(String numConta) throws ConexaoException, ContaNãoCadastradaException, ContaJaCadastradaException{
 
 		// Abrindo a conexão com o banco
 		try {
@@ -289,7 +299,7 @@ public class ContaCorrenteDAO {
 			stmt.close();
 
 		} catch (SQLException e) {
-			throw new ConexaoException(	"Não foi possível preparar o banco para a  busca de dados pelo numero da conta na tabela conta");
+			throw new ConexaoException(	"Não foi possível preparar o banco para a  busca de dados pelo numero da conta na Tabela conta");
 		} finally {
 
 			try {
@@ -306,6 +316,11 @@ public class ContaCorrenteDAO {
 				throw new ConexaoException(	"Não foi possível fechar a conexão com o banco");
 			}
 		}
+		
+		if(existe == false)
+			throw new ContaNãoCadastradaException("Conta não cadastrada!");
+			
 		return existe;
+		
 	}
 }

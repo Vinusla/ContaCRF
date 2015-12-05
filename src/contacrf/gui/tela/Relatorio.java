@@ -4,8 +4,11 @@ import contacrf.DAO.EnderecoDAO;
 import contacrf.DAO.Per;
 import contacrf.DAO.PessoaFisicaDAO;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.EnderecoNullPointerException;
+import contacrf.exception.PessoaFisicaNullPointerException;
 import contacrf.gui.Botoes;
 import contacrf.model.PessoaFisica;
+import contacrf.model.Tabela;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -15,9 +18,16 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 
-public class Relatorio implements EventHandler<ActionEvent>{
+public class Relatorio extends Tabela implements EventHandler<ActionEvent> {
 
+	
+	
+	
 	public void handle(ActionEvent evento) {
+		
+		
+		
+		
 		Per per = new Per();
 		Buscar busca = new Buscar();
 		PessoaFisica pf = new PessoaFisica();
@@ -40,7 +50,13 @@ public class Relatorio implements EventHandler<ActionEvent>{
 				// NUMERO DA CONTA
 				alert.showAndWait();
 			} catch (ConexaoException e) {
-				Erro erro = new Erro("Cliente não existe no sistema!!");
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);
+			} catch (PessoaFisicaNullPointerException e) {
+				Erro erro = new Erro(e.getMessage());
+				erro.handle(null);
+			} catch (EnderecoNullPointerException e) {
+				Erro erro = new Erro(e.getMessage());
 				erro.handle(null);
 			}
 		}

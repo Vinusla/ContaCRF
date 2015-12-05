@@ -11,6 +11,7 @@ import contacrf.gui.tela.Relatorio;
 import contacrf.gui.tela.Saldo;
 import contacrf.gui.tela.Saque;
 import contacrf.gui.tela.Transferencia;
+import contacrf.model.Tabela;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -48,7 +49,7 @@ public class Main extends Application {
     private ProgressBar loadProgress;
     private Label progressText;
     private static final int SPLASH_WIDTH = 500;
-    private static final int SPLASH_HEIGHT = 220;
+    private static final int SPLASH_HEIGHT = 520;
 
     public static void main(String[] args) throws Exception {
         launch(args);
@@ -58,20 +59,20 @@ public class Main extends Application {
     public void init() {
         ImageView splash = new ImageView(new Image(SPLASH_IMAGE ));
         loadProgress = new ProgressBar();
-        loadProgress.setPrefWidth(SPLASH_WIDTH - 20);
+        loadProgress.setPrefWidth(SPLASH_WIDTH);
         progressText = new Label("Will find friends for peanuts . . .");
         splashLayout = new VBox();
         splashLayout.getChildren().addAll(splash, loadProgress, progressText);
         progressText.setAlignment(Pos.CENTER);
         splashLayout.setStyle(
                 "-fx-padding: 5; " +
-                "-fx-background-color: cornsilk; " +
+                "-fx-background-color: white; " +
                 "-fx-border-width:5; " +
                 "-fx-border-color: " +
                     "linear-gradient(" +
                         "to bottom, " +
-                        "chocolate, " +
-                        "derive(chocolate, 50%)" +
+                        "green, " +
+                        "derive(green, 50%)" +
                     ");"
         );
         splashLayout.setEffect(new DropShadow());
@@ -91,7 +92,7 @@ public class Main extends Application {
                                  "Ajuda");
                 updateMessage("Inicializando ...");
                 for (int i = 0; i < availableFriends.size(); i++) {
-                    Thread.sleep(100); // MUDAR PARA 800
+                    Thread.sleep(800); // MUDAR PARA 800
                     updateProgress(i + 1, availableFriends.size());
                     String nextFriend = availableFriends.get(i);
                     foundFriends.add(nextFriend);
@@ -127,8 +128,8 @@ public class Main extends Application {
 		Menu menuInicio = new Menu("_Conta"); // MENU
 		MenuItem subAbrir = new MenuItem("Abrir conta"); // SUBMENU
 		MenuItem subEditar = new MenuItem("Editar conta"); // SUBMENU
-		MenuItem subExibir = new MenuItem("Exibir contas");
-		MenuItem subListar = new MenuItem("Listar contas");
+		MenuItem subExibir = new MenuItem("Exibir conta");
+		MenuItem subListar = new MenuItem("Listar contas");		
 		MenuItem subFechar = new MenuItem("Fechar conta");
 		MenuItem subExit = new MenuItem("Exit");
 		subExit.setOnAction(actionEvent -> Platform.exit());
@@ -156,8 +157,9 @@ public class Main extends Application {
 		subAbrir.setOnAction(new Cadastro());
 		subEditar.setOnAction(new Editar());
 		subExibir.setOnAction(new Exibir());
-		subListar.setOnAction(new Listar());
+		subListar.setOnAction(new Listar());		
 		subFechar.setOnAction(new Fechar());
+		
 
 		subSaque.setOnAction(new Saque());
 		subDeposito.setOnAction(new Deposito());

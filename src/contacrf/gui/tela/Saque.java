@@ -7,6 +7,12 @@ import contacrf.DAO.PessoaFisicaDAO;
 import contacrf.controller.ContaCorrenteController;
 import contacrf.controller.PessoaFisicaController;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.ContaJaCadastradaException;
+import contacrf.exception.ContaNãoCadastradaException;
+import contacrf.exception.EnderecoNullPointerException;
+import contacrf.exception.PessoaFisicaNullPointerException;
+import contacrf.exception.SaldoInsuficienteException;
+import contacrf.exception.ValorNegativoException;
 import contacrf.model.Agencia;
 import contacrf.model.ContaCorrente;
 import contacrf.model.PessoaFisica;
@@ -68,34 +74,54 @@ public class Saque implements EventHandler<ActionEvent>{
 		dialog.getDialogPane().getButtonTypes().addAll(buttonTypeB,buttonTypeV);
 		dialog.showAndWait().ifPresent(ok->{
 			if (ok == buttonTypeB) {
+				
+				if(txt1.getText().equals("") || txtV.equals("") || password.getText().equals("")){
+					Erro erro = new Erro("Todos os campos deve ser preenchidos!");
+					erro.handle(null);
+					return;
+				}else{
+				
 				ContaCorrenteController cc = new ContaCorrenteController();
 				ContaCorrente conta = new ContaCorrente();
 				ContaCorrente contaAux = new ContaCorrente();
 				PessoaFisica pf = new PessoaFisica();
 				PessoaFisicaController pfc = new PessoaFisicaController();
 				float valor = Float.parseFloat(txtV.getText());
-				if(valor<0){
-					Erro erro = new Erro("Valor de transferencia invalido!");
-					erro.handle(null);
-					return;
-				}
+								
 				try {
+					
 					contaAux = cc.exibir(txt1.getText());
+					
+					
 					if ('1' == contaAux.getAtivo()){
 						conta = contaAux;
-						pf = pfc.exibir(conta.getCpfCliente());
-					}else{
-						Erro erro = new Erro("Conta bloqueada!");
-						erro.handle(null);
-						return;
+						pf = pfc.exibir(conta.getCpfCliente());					
 					}
-				} catch (Exception e1) {
-					Erro erro = new Erro("Conta nao existe!");
+				} catch (ConexaoException e) {
+					Erro erro = new Erro(e.getMessage());
+					erro.handle(null);
+					return;
+				} catch (ContaNãoCadastradaException e) {
+					Erro erro = new Erro(e.getMessage());
+					erro.handle(null);
+					return;
+				} catch (ContaJaCadastradaException e) {
+					Erro erro = new Erro(e.getMessage());
+					erro.handle(null);
+				}catch (PessoaFisicaNullPointerException e) {
+					Erro erro = new Erro(e.getMessage());
+					erro.handle(null);
+					return;
+				} catch (EnderecoNullPointerException e) {
+					Erro erro = new Erro(e.getMessage());
 					erro.handle(null);
 					return;
 				}
+				
+				
 				String scan;
-				scan = password.getText();
+				scan = password.getText();				
+				
 				if( conta.getSenha().equals(scan)){
 					HBox hb2 = new HBox(10);
 					hb2.getChildren().addAll(new Label("Numero "+conta.getNumero()), new Label("Agencia "+agencia.getNumero()));
@@ -113,24 +139,33 @@ public class Saque implements EventHandler<ActionEvent>{
 					ButtonType buttonV = new ButtonType("Voltar", ButtonData.CANCEL_CLOSE);
 					alert.getDialogPane().getButtonTypes().addAll(buttonV);
 					Optional<ButtonType> result = alert.showAndWait();
+					
 					if (result.get() != buttonV) {
-						if( conta.getSaldo() >= valor){				// REALIZAR OPERAÇAO
-							try {
-								conta.sacar(conta, valor);
-							} catch (Exception e) {
-								Erro erro = new Erro("Transação não realizada!");
-								erro.handle(null);
-							}
+						
+						
+						try {
+							conta.sacar(conta, valor);
 							InfoOk info = new InfoOk();
 							info.handle(null);
-						}else {
-							Erro erro = new Erro("Saldo insuficiente!");
+						} catch (SaldoInsuficienteException e) {
+							Erro erro = new Erro(e.getMessage());
+							erro.handle(null);
+						}catch (ValorNegativoException e) {
+							Erro erro = new Erro(e.getMessage());
+							erro.handle(null);
+						}catch (ConexaoException e) {
+							Erro erro = new Erro(e.getMessage());
+							erro.handle(null);
+						}catch (Exception e) {
+							Erro erro = new Erro(e.getMessage());
 							erro.handle(null);
 						}
+											
 					}
 				}else {
 					Erro erro = new Erro("Senha invalida");
 					erro.handle(null);
+				}
 				}
 			}
 		});

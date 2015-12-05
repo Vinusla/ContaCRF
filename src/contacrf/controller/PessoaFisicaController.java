@@ -5,44 +5,48 @@ import java.util.List;
 
 import contacrf.DAO.PessoaFisicaDAO;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.CpfJaCadastradaException;
 import contacrf.exception.EnderecoNullPointerException;
+import contacrf.exception.PessoaFisicaNullPointerException;
 import contacrf.gui.tela.Erro;
 import contacrf.model.PessoaFisica;
 
 public class PessoaFisicaController {
 
 	private PessoaFisicaDAO pfDAO;
-	private EnderecoController endC;
-	private Erro erro;
-	private String msg = "CPF JA EXISTE";
-
+	private EnderecoController endC;	
+	
 	public PessoaFisicaController(){
 		this.pfDAO =  new PessoaFisicaDAO();
 		this.endC = new EnderecoController();
-		this.erro = new Erro(msg);
+		
 	}
 
-	public void gravar(PessoaFisica pf) throws ConexaoException, EnderecoNullPointerException {
+	public void gravar(PessoaFisica pf) throws ConexaoException, EnderecoNullPointerException, CpfJaCadastradaException {
 
 		try {
-			if(!existeCPF(pf.getCpf()))
-				pfDAO.save(pf);
-			else
-				erro.handle(null);
+			existeCPF(pf.getCpf());
+			pfDAO.save(pf);			
 		} catch (ConexaoException e) {
-			throw new ConexaoException("Não foi possível preparar o banco para a inserção do registro na tabela pessoafisica");
+			throw new ConexaoException(e.getMessage());
 		} catch (EnderecoNullPointerException e) {
-			throw new EnderecoNullPointerException("Objeto do tipo Endereço não pode ser criado");
+			throw new EnderecoNullPointerException(e.getMessage());
+		} catch (CpfJaCadastradaException e) {
+			throw new CpfJaCadastradaException(e.getMessage());
 		}
 	}
 
-	public PessoaFisica exibir(String cpf) throws ConexaoException{
+	public PessoaFisica exibir(String cpf) throws ConexaoException, PessoaFisicaNullPointerException, EnderecoNullPointerException{
 		PessoaFisica pf = null;
 
 		try {
 			pf = this.pfDAO.getByCpf(cpf);
 		} catch (ConexaoException e) {
-			throw new ConexaoException("Não foi possível buscar Pessoa física");
+			throw new ConexaoException(e.getMessage());
+		} catch (PessoaFisicaNullPointerException e) {
+			throw new PessoaFisicaNullPointerException(e.getMessage());
+		} catch (EnderecoNullPointerException e) {
+			throw new EnderecoNullPointerException(e.getMessage());
 		}
 		return pf;
 	}
@@ -73,14 +77,12 @@ public class PessoaFisicaController {
 		return status;
 	}
 
-	public boolean existeCPF(String cpf) throws ConexaoException {
+	public boolean existeCPF(String cpf) throws ConexaoException, CpfJaCadastradaException {
 		boolean existe = false;
-
-		try {
-			existe = pfDAO.verificaCpf(cpf);
-		} catch (ConexaoException e) {
-			throw new ConexaoException(	"Não foi possível preparar o banco para a a busca de dados pelo cpf na tabela pessoafisica");
-		}
+		
+		existe = pfDAO.verificaCpf(cpf);		
+		
+		
 		return existe;
 	}
 }

@@ -62,7 +62,6 @@ public class Buscar implements EventHandler<ActionEvent>{
 					for (String string : listC) {
 						if(string == combobox.getValue()){
 							CPF = combobox.getValue();
-							System.out.println(CPF);
 							this.acho = true;
 						}
 					}

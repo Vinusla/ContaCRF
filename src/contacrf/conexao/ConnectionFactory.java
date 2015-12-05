@@ -22,7 +22,9 @@ public class ConnectionFactory {
 	public Connection getConnection() throws ConexaoException {
 		if (conexao == null) {
 			try {
-				conexao = DriverManager.getConnection("jdbc:mysql://localhost/contacrf", "root", "");
+				JDBCConexao jdbcC = new JDBCConexao();
+				jdbcC.getPropriedades();				
+				conexao = DriverManager.getConnection(jdbcC.getUrl() + "/" + jdbcC.getDatabase(), jdbcC.getUsuario(), jdbcC.getSenha());
 				System.out.println("Abrindo Conexão");
 			} catch (SQLException e) {
 				throw new ConexaoException("Não foi possível abrir a conexão com o banco");

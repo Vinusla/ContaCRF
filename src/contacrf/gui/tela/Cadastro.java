@@ -6,6 +6,10 @@ import java.util.regex.Pattern;
 
 import contacrf.controller.ContaCorrenteController;
 import contacrf.controller.PessoaFisicaController;
+import contacrf.exception.ConexaoException;
+import contacrf.exception.ContaNãoCadastradaException;
+import contacrf.exception.CpfJaCadastradaException;
+import contacrf.exception.EnderecoNullPointerException;
 import contacrf.gui.Botoes;
 import contacrf.model.Agencia;
 import contacrf.model.Conta;
@@ -93,14 +97,6 @@ public class Cadastro implements EventHandler<ActionEvent>{
 		dialog.showAndWait().ifPresent(ok->{// EXIBE TELA E RECEBE VALORES DAS CAIXAS
 			if(buttonTypeOk == ok){
 				
-				
-				String r = "";
-
-				
-				
-				
-				
-				
 						
 				if(bot.getTf1().getText().equals("") || bot.getTf2().getText().equals("") || bot.getTf3().getText().equals("")
 						|| bot.getTf4().getText().equals("") || bot.getTf5().getText().equals("") || bot.getTf7().getText().equals("") 
@@ -120,24 +116,13 @@ public class Cadastro implements EventHandler<ActionEvent>{
 					
 					
 					scan = bot.getTf11().getText();		// RG
+					//só pega os numeros
+					scan = scan.replaceAll("[\\D]", "");
 					pf.setRg(scan);
 					
 					
 					scan = bot.getCbsexo().getValue();	// SEXO
 					pf.setSexo(scan);
-					
-					
-					
-					//valida o telefone	
-					if(!TelefoneValidador.isTelefone(scan = bot.getTf9().getText())){
-					    Erro erro = new Erro("Telefone Inválido");
-						erro.handle(null);
-						return;
-					}	
-					
-					//retira os parenteses e -				      
-				    scan = scan.replaceAll("[\\D]", "");
-					pf.setTelefone(scan);
 					
 					
 					//valida a data	
@@ -150,7 +135,19 @@ public class Cadastro implements EventHandler<ActionEvent>{
 					//retira as barras				      
 				    scan = scan.replaceAll("[\\D]", "");					
 					pf.setDataNasc(scan);
-	
+					
+					
+					//valida o telefone	
+					if(!TelefoneValidador.isTelefone(scan = bot.getTf9().getText())){
+					    Erro erro = new Erro("Telefone Inválido");
+						erro.handle(null);
+						return;
+					}	
+					
+					//retira os parenteses e -				      
+				    scan = scan.replaceAll("[\\D]", "");
+					pf.setTelefone(scan);
+						
 					
 					//valida o cpf	
 					if(!CpfValidador.validaCpf(scan = bot.getTf3().getText())){
@@ -204,19 +201,27 @@ public class Cadastro implements EventHandler<ActionEvent>{
 					conta.setCpfCliente(pf.getCpf());
 					pf.setEndereco(end);
 	
-					try {
-						if(!pfc.existeCPF(pf.getCpf())){ // se o cpf não existe ele cadastra no banco
-							pfc.gravar(pf);
-							cc.AbrirConta(conta.getNumero(), conta.getCpfCliente(),conta.getSenha());
-							// FALTA TRANSAÇOES
-							InfoOk info = new InfoOk();
-							info.handle(null);
-						}else{
-							Erro erro = new Erro("CPF JA EXISTE");
-							erro.handle(null);
-						}
-					} catch (Exception e) {
-					}
+						
+					try {						
+						pfc.existeCPF(pf.getCpf());
+						pfc.gravar(pf);
+						cc.AbrirConta(conta.getNumero(), conta.getCpfCliente(),conta.getSenha());
+						InfoOk info = new InfoOk();
+						info.handle(null);
+					} catch (CpfJaCadastradaException e1) {
+						Erro erro = new Erro(e1.getMessage());
+						erro.handle(null);
+					}catch(ConexaoException e){
+						Erro erro = new Erro(e.getMessage());
+						erro.handle(null);
+					}catch (EnderecoNullPointerException e) {
+						Erro erro = new Erro(e.getMessage());
+						erro.handle(null);
+					}catch (ContaNãoCadastradaException e) {
+						Erro erro = new Erro(e.getMessage());
+						erro.handle(null);
+					}										
+					
 				}
 			}
 		});

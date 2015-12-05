@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import contacrf.conexao.ConnectionFactory;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.EnderecoNullPointerException;
 import contacrf.gui.tela.Erro;
 import contacrf.model.Endereco;
 
@@ -49,7 +51,7 @@ public class EnderecoDAO {
 			stmt.close();
 
 		} catch (SQLException e) {
-			String msg = "Não foi possível preparar o banco para a inserção do registro na tabela endereco";
+			String msg = "Não foi possível preparar o banco para a inserção do registro na Tabela endereco";
 			Erro erro = new Erro(msg);
 			erro.handle(null);
 			throw new ConexaoException(msg);
@@ -59,7 +61,7 @@ public class EnderecoDAO {
 	}
 
 	// Retorna um objeto Endereço atraves do id
-	public Endereco getByEndereco(final int id_end) throws ConexaoException {
+	public Endereco getByEndereco(final int id_end) throws ConexaoException, EnderecoNullPointerException {
 
 		//Abrindo a conexão com o banco
 		try {
@@ -79,6 +81,7 @@ public class EnderecoDAO {
 			ResultSet rs = stmt.executeQuery();
 
 			while(rs.next()){
+				endereco = new Endereco();
 				endereco.setId(rs.getInt("id"));
 				endereco.setRua(rs.getString("rua"));
 				endereco.setNumero(rs.getInt("numero"));
@@ -106,6 +109,11 @@ public class EnderecoDAO {
 				throw new ConexaoException(	"Não foi possível fechar a conexão com o banco");
 			}
 		}
+		
+		
+		if(endereco.equals(null))
+			throw new EnderecoNullPointerException("Endereco não encontrado");
+		
 		return endereco;
 
 	}

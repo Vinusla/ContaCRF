@@ -6,6 +6,8 @@ import java.util.List;
 import contacrf.controller.ContaCorrenteController;
 import contacrf.controller.PessoaFisicaController;
 import contacrf.exception.ConexaoException;
+import contacrf.exception.EnderecoNullPointerException;
+import contacrf.exception.PessoaFisicaNullPointerException;
 import contacrf.model.PessoaFisica;
 import contacrf.util.MascaraDeFormatacao;
 import javafx.collections.FXCollections;
@@ -33,6 +35,8 @@ public class Listar implements EventHandler<ActionEvent>{
 		Stage stage = new Stage();
 		stage.setTitle("Zathura Enterprise ™");
 		pane.setPadding(new Insets(20,20,20,20));
+		
+		
 		ContaCorrenteController cc = new ContaCorrenteController();
 		PessoaFisicaController pfc = new PessoaFisicaController();
 		PessoaFisica pf = new PessoaFisica();
@@ -55,9 +59,16 @@ public class Listar implements EventHandler<ActionEvent>{
 			
 			
 		} catch (ConexaoException e) {
-			Erro erro = new Erro ("Carregamento de dados não concluido");
+			Erro erro = new Erro (e.getMessage());
+			erro.handle(null);
+		} catch (PessoaFisicaNullPointerException e) {
+			Erro erro = new Erro (e.getMessage());
+			erro.handle(null);
+		} catch (EnderecoNullPointerException e) {
+			Erro erro = new Erro (e.getMessage());
 			erro.handle(null);
 		}
+		
 		ObservableList<String> data = FXCollections.observableArrayList();
 		ListView<String> listN = new ListView<String>(data); // LISTA NOME
 	    listN.setPrefSize(200, 250);
