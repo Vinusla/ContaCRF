@@ -1,5 +1,5 @@
 # ContaCRF
 Grupo : Gustavo Heinrich
-        Mateus Cordeiro
-        Pedro Fontes
-        Vinicius Lopes 
+        , Mateus Cordeiro
+        , Pedro Fontes
+        , Vinicius Lopes 
